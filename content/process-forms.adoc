@@ -205,3 +205,22 @@ For tasks, the `ProcessFormContextAware` class contains the following methods:
 * `completeTaskWithOutcome(String outcome, Map<String, Object> processVariables)` - completes the task with an outcome and using the explicitly passed process variables map.
 
 `ProcessFormContext` has a method for getting a `TaskData` object that holds an information about the user task to be completed: `TaskData getTaskData()`.
+
+[[restrict-process-form-usage]]
+==== Restrict Process Form Usage
+
+By default, all custom start and task process forms are available within any process model. If some custom form is intended to be used in particular processes only, then you should specify that processes keys in the `allowedProcessKeys` attribute of the `@StartProcessForm` or the `@TaskProcessForm` annotation.
+
+[source, java]
+----
+@StartProcessForm(allowedProcessKeys = {"process-1", "process-2"})
+----
+
+or
+
+[source, java]
+----
+@TaskProcessForm(allowedProcessKeys = {"process-1", "process-2"})
+----
+
+These forms will be available only for process with `process-1` and `process-2` keys (_Process id_ in the modeler).
