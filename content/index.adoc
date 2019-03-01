@@ -37,13 +37,9 @@ There are several ways to specify a task assignee. You can find them if you expa
 
 You will need to write an expression that evaluates an id of the User who must be an assignee. If you know that a user entity is stored in a process variable called _manager_ then the expression will be `${manager.id}`. You also may invoke Spring bean method that returns a user id: `${demo_MyBean.evaluateManager(methodParam1, 'methodParam2')}`
 
-"Form Field" Assignee Source::
+"Process variable" Assignee Source::
 
-If you select the _Form field_ assignee source then a _LookupField_ component will be displayed in the element properties panel. This component will contain all dynamic fields of type _User_ from other model elements. For example, if you declared a field with id _manager_ of type _User_ for the start event node, then the _manager_ field will be displayed in the lookup for all user tasks in the model. Obviously, the user task will be assigned to the user that was selected on the start form when the process was started.
-
-"Process Variable" Assignee Source::
-
-The _Process variable_ assignee source is similar to the _Form field_ source, but the dropdown list of possible values contains process variables declared in the _Process variables_ block of the process properties panel. A process may be started programmatically without using of the start process form. Process variables values will be passed from the API. In this case, if you need to assign a user task to the person from one of process variables, you can either write an explicit expression for the assignee or add an info about the process variable that can be used in the model to the _Process variables_ section of the process properties panel.
+If you select the _Process variable_ assignee source then a LookupField component will be displayed in the element properties panel. This lookup field will contain all dynamic fields with _User_ type from other model elements. Also all _process variables_ with _User_ type will be there. Process variables are declared in the _Process variables_ block of the process properties panel. A process may be started programmatically without using of the start process form and process variables values may be passed from the API. In this case, if you need to assign a user task to the person from one of process variables, you can either write an explicit expression for the assignee or add an info about the process variable that can be used in the model to the _Process variables_ section of the process properties panel.
 
 "User provider" Assignee Source::
 
@@ -88,7 +84,7 @@ Let's look at the user tasks element in process XML:
 
 In the modeler, you'll have to fill the expression for the _collection_ field of the _multiInstanceLoopCharacteristics_ element and the _elementVariable_ field. After that use the _elementVariable_ value as an _assignee_ for the user task element.
 
-BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process and some other elements) has a _Multi-instance_ section in the properties panel. When you change the multi-instance type from _None_ to _Parallel_ or _Sequential_, new fields appear on the panel. Let's suppose that in the start process form you defined a field _lawyers_ with the _User list_ type. This field value holds a collection of users. For the current user task you may select a _Form field_ collection source and then select a _lawyers_ field in the _Collection form field_ lookup. 
+BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process and some other elements) has a _Multi-instance_ section in the properties panel. When you change the multi-instance type from _None_ to _Parallel_ or _Sequential_, new fields appear on the panel. Let's suppose that in the start process form you defined a field _lawyers_ with the _User list_ type. This field value holds a collection of users. For the current user task you may select a _Process variable_ collection source and then select a _lawyers_ field in the _Process variable_ lookup. 
 
 image::multi-instance-panel.png[]
 

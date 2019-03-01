@@ -54,7 +54,7 @@ image::quick-start/user-task-change-type.png[]
 
 Type a task name: `Approval`. You can do that both right on the element node or in the _Name_ field of the properties panel. In the properties panel specify a task id: `approval`.
 
-There are several ways to specify task assignee (see <<single-user-assignment>>). In this current case, we'll use the `Form field` assignee source. After you select this source a _Form field_ lookup field will be displayed. All form fields with the type `User` will be displayed there. We have only one such field, it is `manager` defined in the start event process form. Select it.
+There are several ways to specify task assignee (see <<single-user-assignment>>). In this current case, we'll use the `Process variable` assignee source. After you select this source a _Process variable_ lookup field will be displayed. All form fields and process variables with the type `User` will be displayed there. We have only one such field, it is `manager` defined in the start event process form. Select it.
 
 image::quick-start/approval-task-assignee.png[]
 
@@ -114,7 +114,7 @@ The process model is ready to be deployed to the process engine. Click the `Depl
 
 image::quick-start/deploy-process-button.png[]
 
-To start the process open the _BProc > Start Process_ screen. This screen displays process definitions available for starting by the current user. Double click on the `Reibursement` process line or select it and click the _Start process_ button. 
+To start the process open the _BProc > Start Process_ screen. This screen displays process definitions available for starting by the current user. Double click on the `Reimbursement` process line or select it and click the _Start process_ button. 
 
 A start form will appear. Fill the fields, select the manager and click the _Start process_ button. 
 
