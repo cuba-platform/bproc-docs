@@ -197,7 +197,7 @@ The `@ProcessVariable` annotation, in addition to functions described in the <<c
 
 Just like start process form, task process forms should implement the `ProcessFormContextAware` interface. A `ProcessFormContextAware` object that is set when a task form is opened contains a `TaskData` object holding all the information about a user task and methods for working the the task.
 
-For tasks, the `ProcessFormContextAware` class contains the following methods:
+For tasks, the `ProcessFormContext` class contains the following methods:
 
 * `completeTask()` - completes the task without any outcome and using the process variables collected from annotated fields.
 * `completeTask(Map<String, Object> processVariables)` - completes the task without any outcome and using the explicitly passed process variables map.
@@ -205,6 +205,117 @@ For tasks, the `ProcessFormContextAware` class contains the following methods:
 * `completeTaskWithOutcome(String outcome, Map<String, Object> processVariables)` - completes the task with an outcome and using the explicitly passed process variables map.
 
 `ProcessFormContext` has a method for getting a `TaskData` object that holds an information about the user task to be completed: `TaskData getTaskData()`.
+
+[[custom-process-form-parameters]]
+==== Custom Process Form Parameters
+
+Custom process forms may be parameterized from the modeler. This means that you can reuse the form for different model elements by setting up form parameters in the _Form params_ section.
+
+Here is an example of a process form that displays a lookup field for selecting a user. Only users that belongs to particular user group should be available for selection. The user value should be saved into particular process variable. Form expects the following form parameters:
+
+* variableName
+* groupName
+
+If you want to select a user from the _Approvers_ user group and store it into process variable with the name _approver_ then the _Form params_ section should look like this:
+
+image::process-forms/custom-form-params.png[]
+
+.participant-selection-form.xml
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://caption"
+        messagesPack="com.haulmont.bproc.ref.web.screens.forms.particpantselection">
+    <data>
+        <collection id="usersDc" class="com.haulmont.cuba.security.entity.User" view="_minimal">
+            <loader id="usersDl">
+                <query><![CDATA[select u from sec$User u order by u.name]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>u.id in :userIds</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout spacing="true">
+        <form width="400px">
+            <lookupField id="participantLookup" caption="msg://participant" optionsContainer="usersDc" width="100%"/>
+        </form>
+        <hbox spacing="true">
+            <button id="completeTaskBtn" icon="font-icon:CHECK" caption="msg://completeTask"/>
+        </hbox>
+    </layout>
+</window>
+----
+
+.ParticipantSelectionForm.java
+[source, java]
+----
+@TaskProcessForm(formParamNames = {"variableName", "groupName"}) <1>
+@UiController("ref_ParticipantSelectionForm")
+@UiDescriptor("participant-selection-form.xml")
+public class ParticipantSelectionForm extends Screen implements ProcessFormContextAware {
+
+    @Inject
+    private UserGroupService userGroupService;
+
+    @Inject
+    private DataManager dataManager;
+
+    @Inject
+    private LookupField<User> participantLookup;
+
+    @Inject
+    private CollectionLoader<User> usersDl;
+
+    private ProcessFormContext processFormContext;
+
+    private String variableName;
+
+    @Override
+    public void setProcessFormContext(ProcessFormContext processFormContext) {
+        this.processFormContext = processFormContext;
+    }
+
+    @Subscribe
+    private void onBeforeShow(BeforeShowEvent event) {
+        Map<String, String> formParams = processFormContext.getFormParams(); <2>
+        variableName = formParams.get("variableName");
+        String groupName = formParams.get("groupName");
+        participantLookup.setCaption(variableName);
+
+        UserGroup userGroup = dataManager.load(UserGroup.class) 
+                .query("select ug from bproc_UserGroup ug where ug.name = :name")
+                .parameter("name", groupName)
+                .one();
+
+        List<User> usersOfUserGroup = userGroupService.getUsers(userGroup); <3>
+        List<UUID> userIds = usersOfUserGroup.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+
+        usersDl.setParameter("userIds", userIds);
+        usersDl.load();
+    }
+
+    @Subscribe("completeTaskBtn")
+    private void onCompleteTaskBtnClick(Button.ClickEvent event) {
+        Map<String, Object> processVariables = ParamsMap.of(variableName, participantLookup.getValue()); <4>
+        processFormContext.completeTask(processVariables);
+        closeWithDefaultAction();
+    }
+}
+----
+<1> Optional `formParamNames` annotation attribute declares parameters used by the form. In the form parameter editor in the modeler these values will be displayed in the dropdown list when you select a parameter name. If you don't specify the annotation attribute you'll have to type the name manually.
+<2> `getFormParams()` method of the `ProcessFormContext` returns a map of parameters defined for this form in the modeler.
+<3> Members of the user group with the given name are evaluated and passed to the data loader as an argument.
+<4> Selected user is stored into a process variable with the given name.
 
 [[restrict-process-form-usage]]
 ==== Restrict Process Form Usage
