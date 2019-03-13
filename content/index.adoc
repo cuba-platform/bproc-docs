@@ -116,7 +116,7 @@ In the _Candidate users edit_ dialog a _Users source_ should be defined. The pos
 [[user_task_outcomes]]
 === User Task Outcomes
 
-When users complete user tasks they often have to make some decision (approve or reject, yes or no, etc.). After they do it, the process should go one or another way. You may use task outcomes for modeling such cases. For dynamic process forms of the user tasks, there is the _Outcomes_ panel in the _Form_ properties section.
+When users complete user tasks they often have to make some decision (approve or reject, yes or no, etc.). After they do it, the process should go one or another way. You may use task outcomes for modeling such cases. For process forms of user tasks, there is the _Outcomes_ panel in the _Form_ properties section.
 
 image::outcomes-panel.png[]
 
@@ -153,15 +153,6 @@ This parameter is _Condition type_. It has several possible values:
 image::outcome-sequence-flow-dropdown-multi-instance.png[]
 
 For the screenshot above, the process will continue its execution using this sequence flow only if all of parallel approvers completed the task with the _approve_ outcome.
-
-Outcomes list may be declared also for custom process forms. Use the `outcomes` parameter of the `@TaskProcessForm` annotation.
-
-[source,java]
-----
-@TaskProcessForm(outcomes = {"approve", "reject"})
-----
-
-See the <<custom_task_process_form_example>> section for details.
 
 [[pools-and-lanes]]
 == Pools and Lanes

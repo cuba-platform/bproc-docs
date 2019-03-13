@@ -157,7 +157,7 @@ The `processFormContext.startProcess()` method starts the process using annotate
 .TaskApprovalForm.java
 [source, java]
 ----
-@TaskProcessForm(outcomes = {"approve", "reject"})
+@TaskProcessForm
 @UiController("ref_TaskApprovalForm")
 @UiDescriptor("task-approval-form.xml")
 public class TaskApprovalForm extends Screen implements ProcessFormContextAware {
@@ -191,7 +191,7 @@ public class TaskApprovalForm extends Screen implements ProcessFormContextAware 
 }
 ----
 
-Task process form screen class must have the `@TaskProcessForm` annotation. Only screens with this annotation are displayed in the process forms lookup in the modeler. An optional `outcomes` annotation attribute declares a list of possible task outcomes. These outcome names will be used in the modeler when you specify a condition for a sequence flow node. See the <<user_task_outcomes>> section.
+Task process form screen class must have the `@TaskProcessForm` annotation. Only screens with this annotation are displayed in the process forms lookup in the modeler.
 
 The `@ProcessVariable` annotation, in addition to functions described in the <<custom_start_process_form_example>> section, do some additional work. If by the moment the task form is opened, some process variable already has a value, then this value will be set into UI component or class field.
 
@@ -316,6 +316,92 @@ public class ParticipantSelectionForm extends Screen implements ProcessFormConte
 <2> `getFormParams()` method of the `ProcessFormContext` returns a map of parameters defined for this form in the modeler.
 <3> Members of the user group with the given name are evaluated and passed to the data loader as an argument.
 <4> Selected user is stored into a process variable with the given name.
+
+==== Getting the Outcomes List in Custom Process Forms
+
+Here is an example of the process form that automatically creates outcome buttons based on the information defined in the process model.
+
+For the form we may define several outcomes:
+
+image::process-forms/dynamic-outcomes-form-outcomes-list.png[]
+
+For each outcome we may optionally define the _notification_ parameter:
+
+image::process-forms/dynamic-outcomes-form-yes-outcome-edit.png[]
+
+When the form is opened, buttons for each outcome will be generated. When the button is clicked, the task will be completed with the given outcome. If the _notification_ parameter was defined for the outcome, a notification will be displayed.
+
+.dynamic-outcomes-form.xml
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="com.haulmont.bproc.ref.web.screens.forms.dynamicoutcomes">
+    <layout>
+        <hbox id="outcomesPanel" spacing="true"/>
+    </layout>
+</window>
+----
+
+.DynamicOutcomesForm.java
+[source, java]
+----
+
+@TaskProcessForm
+@UiController("ref_DynamicOutcomesForm")
+@UiDescriptor("dynamic-outcomes-form.xml")
+public class DynamicOutcomesForm extends Screen implements ProcessFormContextAware {
+
+    @Inject
+    private UiComponents uiComponents;
+    
+    @Inject
+    private Notifications notifications;
+    
+    private ProcessFormContext processFormContext;
+
+    @Inject
+    private HBoxLayout outcomesPanel;
+
+    @Subscribe
+    private void onBeforeShow(BeforeShowEvent event) {
+        initOutcomesPanel();
+    }
+
+    private void initOutcomesPanel() {
+        ProcessFormData formData = processFormContext.getFormData(); <1>
+        formData.getOutcomes().forEach(this::createOutcomeBtn); <2>
+    }
+
+    private void createOutcomeBtn(ProcessFormOutcome outcome) {
+        Button button = uiComponents.create(Button.class);
+        button.setCaption(outcome.getCaption());
+        button.setIcon(outcome.getIcon());
+        button.setAction(new BaseAction(outcome.getName()) {
+            @Override
+            public void actionPerform(Component component) {
+                processFormContext.completeTaskWithOutcome(outcome.getName());
+                String notification = outcome.getOutcomeParamsMap().get("notification"); <3>
+                if (notification != null)
+                    notifications.create(Notifications.NotificationType.HUMANIZED)
+                            .withCaption(notification)
+                            .show();
+                closeWithDefaultAction();
+            }
+        });
+        outcomesPanel.add(button);
+    }
+
+    @Override
+    public void setProcessFormContext(ProcessFormContext processFormContext) {
+        this.processFormContext = processFormContext;
+    }
+}
+----
+<1> The `ProcessFormData` can be gotten from the _processFormContext_
+<2> The `formData` contains an information about form outcomes defined in the process model
+<3> For the outcome you can get a map of outcome parameters, and if there is a _notification_ parameter, a notification will be displayed
 
 [[restrict-process-form-usage]]
 ==== Restrict Process Form Usage
