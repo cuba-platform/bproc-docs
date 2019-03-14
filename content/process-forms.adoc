@@ -257,7 +257,7 @@ image::process-forms/custom-form-params.png[]
 .ParticipantSelectionForm.java
 [source, java]
 ----
-@TaskProcessForm(formParamNames = {"variableName", "groupName"}) <1>
+@TaskProcessForm(formParamNames = {"variableName", "groupName"})    <1>
 @UiController("ref_ParticipantSelectionForm")
 @UiDescriptor("participant-selection-form.xml")
 public class ParticipantSelectionForm extends Screen implements ProcessFormContextAware {
@@ -285,12 +285,12 @@ public class ParticipantSelectionForm extends Screen implements ProcessFormConte
 
     @Subscribe
     private void onBeforeShow(BeforeShowEvent event) {
-        Map<String, String> formParams = processFormContext.getFormParams(); <2>
+        Map<String, String> formParams = processFormContext.getFormData().getFormParamsMap();   <2>
         variableName = formParams.get("variableName");
         String groupName = formParams.get("groupName");
         participantLookup.setCaption(variableName);
 
-        UserGroup userGroup = dataManager.load(UserGroup.class) 
+        UserGroup userGroup = dataManager.load(UserGroup.class)
                 .query("select ug from bproc_UserGroup ug where ug.name = :name")
                 .parameter("name", groupName)
                 .one();
@@ -306,14 +306,14 @@ public class ParticipantSelectionForm extends Screen implements ProcessFormConte
 
     @Subscribe("completeTaskBtn")
     private void onCompleteTaskBtnClick(Button.ClickEvent event) {
-        Map<String, Object> processVariables = ParamsMap.of(variableName, participantLookup.getValue()); <4>
+        Map<String, Object> processVariables = ParamsMap.of(variableName, participantLookup.getValue());    <4>
         processFormContext.completeTask(processVariables);
         closeWithDefaultAction();
     }
 }
 ----
 <1> Optional `formParamNames` annotation attribute declares parameters used by the form. In the form parameter editor in the modeler these values will be displayed in the dropdown list when you select a parameter name. If you don't specify the annotation attribute you'll have to type the name manually.
-<2> `getFormParams()` method of the `ProcessFormContext` returns a map of parameters defined for this form in the modeler.
+<2> `getFormData()` method of the `ProcessFormContext` returns a `FormData` objects that contains an information about the displayed form, including a map of parameters defined for this form in the modeler (`getFormParamsMap()` method).
 <3> Members of the user group with the given name are evaluated and passed to the data loader as an argument.
 <4> Selected user is stored into a process variable with the given name.
 
@@ -355,14 +355,14 @@ public class DynamicOutcomesForm extends Screen implements ProcessFormContextAwa
 
     @Inject
     private UiComponents uiComponents;
-    
+
     @Inject
     private Notifications notifications;
-    
-    private ProcessFormContext processFormContext;
 
     @Inject
     private HBoxLayout outcomesPanel;
+
+    private ProcessFormContext processFormContext;
 
     @Subscribe
     private void onBeforeShow(BeforeShowEvent event) {
@@ -370,11 +370,11 @@ public class DynamicOutcomesForm extends Screen implements ProcessFormContextAwa
     }
 
     private void initOutcomesPanel() {
-        ProcessFormData formData = processFormContext.getFormData(); <1>
+        FormData formData = processFormContext.getFormData();   <1>
         formData.getOutcomes().forEach(this::createOutcomeBtn); <2>
     }
 
-    private void createOutcomeBtn(ProcessFormOutcome outcome) {
+    private void createOutcomeBtn(FormOutcome outcome) {
         Button button = uiComponents.create(Button.class);
         button.setCaption(outcome.getCaption());
         button.setIcon(outcome.getIcon());
@@ -382,7 +382,7 @@ public class DynamicOutcomesForm extends Screen implements ProcessFormContextAwa
             @Override
             public void actionPerform(Component component) {
                 processFormContext.completeTaskWithOutcome(outcome.getName());
-                String notification = outcome.getOutcomeParamsMap().get("notification"); <3>
+                String notification = outcome.getOutcomeParamsMap().get("notification");    <3>
                 if (notification != null)
                     notifications.create(Notifications.NotificationType.HUMANIZED)
                             .withCaption(notification)
@@ -399,7 +399,7 @@ public class DynamicOutcomesForm extends Screen implements ProcessFormContextAwa
     }
 }
 ----
-<1> The `ProcessFormData` can be gotten from the _processFormContext_
+<1> The `FormData` can be gotten from the _processFormContext_
 <2> The `formData` contains an information about form outcomes defined in the process model
 <3> For the outcome you can get a map of outcome parameters, and if there is a _notification_ parameter, a notification will be displayed
 
