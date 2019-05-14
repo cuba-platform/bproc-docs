@@ -2,10 +2,12 @@
 :toc: left
 :toclevels: 5
 :sectnumlevels: 5
+:stylesheet: studio.css
 :linkcss:
 :source-highlighter: coderay
 :doctype: book
 :icons: font
+:stylesdir: styles
 :imagesdir: images
 :sectnums:
 :sectlinks:

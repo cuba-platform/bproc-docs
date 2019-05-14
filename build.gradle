@@ -10,22 +10,38 @@ buildscript {
 
 apply plugin: 'org.asciidoctor.convert'
 
-apply plugin: 'idea'
+ext.docsVersion = rootProject.hasProperty('docsVersion') ? rootProject['docsVersion'] : '2.3'
 
 asciidoctor {
-    sourceDir 'content'
+    sourceDir = file('content')
     sources {
         include 'index.adoc'
     }
-    outputDir "$buildDir/docs"
-    resources {
-        from('content/images') {
-            include('**/*.png')
-        }
-        into 'images'
+    outputDir = file('build')
+}
+
+asciidoctor.doLast {
+    copy {
+        from 'images'
+        into 'build/html5/images'
+    }
+    copy {
+        from 'styles'
+        into 'build/html5/styles'
+    }
+    copy {
+        from 'js'
+        into 'build/html5/js'
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.3'
+build.dependsOn(asciidoctor)
+
+build.doLast {
+    def tmpDir = new File(buildDir, "tmp/war")
+    copy {
+        from "$buildDir/html5"
+        into tmpDir
+    }
+    ant.jar(destfile: "$buildDir/war/bproc-" + docsVersion + ".war", basedir: tmpDir)
 }
