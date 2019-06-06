@@ -1,24 +1,24 @@
 [[quick-start]]
 == Quick Start
 
-This section describes how to model and run a simple business process for reimbursement.
+This section describes how to model and run a simple business process for a refund.
 
 Three persons will be involved in the process:
 
-* an employee who asks for reimbursement
-* a manager who approves the reimbursement
+* an employee who asks for the refund
+* a manager who approves the refund
 * an accountant who actually transfers money to employee account
 
 The model that we are going to create:
 
-image::quick-start/reimbursement-process-model.png[]
+image::quick-start/refund-process-model.png[]
 
 Let's start modeling the process. Open the _BProc > Modeler_ screen.
 
 When the modeler is first opened, the properties panel on the right displays properties of the process itself. Modify the fields:
 
-* _Process id_: `reimbursement`
-* Process _Name_: `Reimbursement`
+* _Process id_: `refund`
+* Process _Name_: `Refund`
 
 image::quick-start/modify-process-id.png[]
 
@@ -26,25 +26,27 @@ Find the _Documentation_ text area in the properties panel and write a process d
 
 image::quick-start/process-documentation.png[]
 
-Click on the `StartEvent` element. Properties of the start event element will be displayed on the properties panel. The _Form_ section is used to describe a form that will be displayed to users when they start the process. There are two types of process forms: _Dynamic_ and _Custom_. A dynamic process form is a form whose fields are defined in the process model and such form is generated in the runtime when the process is started. A custom form is a reference to a standard framework screen (see the <<process-forms>> section for details). In this tutorial we'll define a dynamic start process form. 
+Click on the `StartEvent` element. Properties of the start event element will be displayed on the properties panel. The _Form_ section is used to describe a form that will be displayed to users when they start the process. There are two types of process forms: _CUBA screen_ and _Input dialog_. An _input dialog_ form fields are defined in the process model and such form is generated in the runtime when the user starts a process or completes a user task. A _CUBA screen_ form is a reference to a standard framework screen (see the <<process-forms>> section for details). Let's specify the _Input dialog_ start process form.  Select the _Input dialog_ form type.
 
-Create a new form field. In the field editor specify the following field properties:
+Create a new input dialog parameter. In the input dialog parameter editor specify the following properties:
 
 image::quick-start/expense-amount-field-editor.png[]
 
-Create the _expenseDate_ field with the `Date` type and the _document_ field with the `File` type.
+Note that the _Process variable_ lookup field allows you to enter the value in it. If you want to associate the dialog parameter with the process variable that hasn't been used before, then type the variable name and press Enter. If you want to display some existing variable, select its name from the dropdown list (we'll see it shortly).
 
-After that create a field _manager_ with a `User` type. For the `User` type additional fields are displayed in the editor: they are used for specifying a UI component for user selection (lookup field or picker field) and an optional JPQL query for filling the lookup field or a screen for selecting users in case of picker fields. We'll use the the `LookupField` component and will leave the _JPQL query_ field blank - that means that the default query `select e from sec$User e` will be used.
+Create the _expenseDate_ input dialog parameter with the `Date` type and the _document_ parameter with the `File` type.
+
+After that create an input dialog parameter _manager_ with a `User` type. For the `User` type, additional fields are displayed in the editor: they are used for specifying a UI component for user selection (lookup field or picker field) and an optional JPQL query for filling the lookup field or a screen for selecting users in case of picker fields. We'll use the `LookupField` component and will leave the _JPQL query_ field blank - that means that the default query `select e from sec$User e` will be used.
 
 image::quick-start/manager-field-editor.png[]
 
-Form fields section should look this way:
+Input dialog parameters section should look this way:
 
 image::quick-start/start-event-form-fields.png[]
 
-When a process is started all form field values will be written into process variables. Field ids will be used as variable names.
+When a process is started input dialog parameters will be written into corresponding process variables.
 
-After you've specified all start form fields create the `Approval` user task. If the start event node is selected on the canvas, you may click the _Append task_ icon in the popup menu:
+After you've specified the start form, create the `Approval` user task. If the start event node is selected on the canvas, you may click the _Append task_ icon in the popup menu:
 
 image::quick-start/start-event-append-task.png[]
 
@@ -58,25 +60,25 @@ There are several ways to specify task assignee (see <<single-user-assignment>>)
 
 image::quick-start/approval-task-assignee.png[]
 
-For the `Approval` task we must also specify a process form. In this form we'll display some values from the start form and one new field. For selecting an existing form field use the ellipsis button.
+For the `Approval` task we also must specify a process form. It will be an input dialog again. The dialog will display process variables from the start event form and one more new parameter. 
 
-image::quick-start/form-field-ellipsis-button.png[]
+Create a new input dialog parameter and in the _Process variable_ dropdown list select the `expenseAmount` variable.
 
-The dialog displays form fields declared in other elements of the process. You can select multiple fields here. Press the *Ctrl* key and select `expenseAmount`, `expenseDate` and `document` fields. 
+image::quick-start/existing-variable-input-dialog-param-edit.png[]
 
-image::quick-start/select-form-fields-approval.png[]
+You can make it non-editable by unselecting the _Editable_ checkbox.
 
-After you close the dialog these fields will appear in the fields list. For each field open the field editor and unselect the _Editable_ checkbox. This will make field components read-only. We don't want the manager to modify the values, just to view them.
+In the same way create input dialog parameters for `expenseAmount`, `expenseDate` and `document` variables.
 
-Add a new field with the `comment` id and the `Multiline string` type. This field will be used by the manager to make some notes when approving or rejecting the reimbursement request.
+Add a new dialog parameter with the `comment` process variable name and the `Multiline string` type. This field will be used by the manager to make some notes when approving or rejecting the refund request.
 
-At the `Approval` step the manager has two options: to `Approve` and to `Reject` the request. An easy way to support this in a dynamic form is to use outcomes (for details see <<user_task_outcomes>>). For each outcome a button will be displayed on the dynamic form and the result will be stored in a special process variable.
+At the `Approval` step, the manager has two options: to `Approve` and to `Reject` the request. An easy way to support this is to use outcomes (for details see <<user-task-outcomes>>). For each outcome a button will be displayed on the form and the result will be stored in a special process variable.
 
-Create new outcome using the corresponding button of the _Outcomes_ section. In the outcome editor specify an outcome name `approve`, a caption `Approve` and select an icon `CHECK` in the icons list.
+Create a new outcome using the corresponding button of the _Outcomes_ section. In the outcome editor specify an outcome id `approve`, a caption `Approve` and select an icon `CHECK` in the icons list.
 
 image::quick-start/approve-outcome-edit.png[]
 
-Then create a second outcome: the name is `reject`, the caption is `Reject`, the icon is `BAN`.
+Then create a second outcome: the id is `reject`, the caption is `Reject`, the icon is `BAN`.
 
 After the `Approval` task is completed, the process must decide which path to chose using the outcome value. Let's create an exclusive gateway. Click the `Approval` task element and click the `Append Gateway` action of the context menu.
 
@@ -84,7 +86,7 @@ image::quick-start/approval-task-append-gateway.png[]
 
 Two sequence flows should leave the exclusive gateway: one for `EndEvent` element and another for new user task called `Payment`. Give names to sequence flows: `approved` and `rejected`. 
 
-image::quick-start/reimbursement-process-model.png[]
+image::quick-start/refund-process-model.png[]
 
 To specify a condition for the `approved` flow, click on the element and in the sequence flow properties panel select the `Task outcome` value in the _Condition source_ lookup field. Select an `Approval` user task and the `approve` outcome.
 
@@ -92,7 +94,7 @@ image::quick-start/approved-sequence-flow-properties.png[]
 
 Do the same for the `rejected` sequence flow, but select a `reject` outcome value for it. 
 
-For the `Payment` task we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task, but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option, but first we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
+For the `Payment` task, we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option but first, we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
 
 image::quick-start/accountants-user-group-edit.png[]
 
@@ -100,9 +102,9 @@ In the modeler click the edit button near the _Candidate groups_ field. The dial
 
 image::quick-start/payment-task-candidate-groups.png[]
 
-Configure a dynamic form for the `Payment` task. Add existing `expenseAmount`, `expenseDate`, `document` and `comment` fields using the ellipsis button of the `Form fields` section.
+Configure an input dialog for the `Payment` task. Add existing `expenseAmount`, `expenseDate`, `document` and `comment` fields using the ellipsis button of the `Form fields` section.
 
-The last thing we need do is to specify who can start this process. Click on the free space on the canvas to display process properties. Similar to the `Payment` task we'll define _Candidate groups_ in the _Started candidates_ section. 
+The last thing we need do is to specify who can start this process. Click on the free space on the canvas to display process properties. Similar to the `Payment` task we'll define _Candidate groups_ in the _Starter candidates_ section. 
 
 image::quick-start/process-starter-candidates.png[]
 
@@ -114,7 +116,7 @@ The process model is ready to be deployed to the process engine. Click the `Depl
 
 image::quick-start/deploy-process-button.png[]
 
-To start the process open the _BProc > Start Process_ screen. This screen displays process definitions available for starting by the current user. Double click on the `Reimbursement` process line or select it and click the _Start process_ button. 
+To start the process open the _BProc > Start Process_ screen. This screen displays process definitions available for starting by the current user. Double click on the `Refund` process line or select it and click the _Start process_ button. 
 
 A start form will appear. Fill the fields, select the manager and click the _Start process_ button. 
 
@@ -130,7 +132,7 @@ image::quick-start/approval-task-form.png[]
 
 Some fields on this form are read-only as we configured in the modeler and there are two buttons for outcomes: _Approve_ and _Reject_. Enter the comment and click the _Approve_ button.
 
-Log in on behalf of any user who is a member of the `Accountants` user group. Open the _BProc > My Tasks_ screen. You'll see that the table is empty, but in the filter there is an indicator that the user has a _group task_ that can be claimed. Select the _Group tasks_ type and click the _Apply_ button.
+Log in on behalf of any user who is a member of the `Accountants` user group. Open the _BProc > My Tasks_ screen. You'll see that the table is empty, but in the filter, there is an indicator that the user has a _group task_ that can be claimed. Select the _Group tasks_ type and click the _Apply_ button.
 
 image::quick-start/my-tasks-payment.png[]
 
@@ -138,7 +140,7 @@ All users of the `Accountants` group will see the `Payment` task among their gro
 
 image::quick-start/payment-task-claim-form.png[]
 
-_Claim and continue_ button will remove the task from group task lists of other users and will leave the task form on the screen. The form will become editable and buttons for completing the task will be displayed.
+_Claim and resume_ button will remove the task from group task lists of other users and will leave the task form on the screen. The form will become editable and buttons for completing the task will be displayed.
 
 _Claim and close_ will remove the task from other users task lists, the process form will be closed. The task will appear in the _Assigned tasks_ list for the current user. Click the _Claim and close_ button.
 
