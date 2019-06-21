@@ -298,8 +298,8 @@ public class TaskApprovalForm extends Screen implements ProcessFormContextAware 
 <2> The value of the _orderNumber_ process variables will be set to the _orderNumber_ text field when the form is displayed. The same is for _orderDate_ process variable.
 <3> Button click event handler completes the task with a given outcome. If values of _orderNumber_ or _orderDate_ fields were changed, the new values will be written to process variables.
 
-[[entity-edit-process-form-example]]
-===== Entity Edit Process Form Example
+[[entity-edit-process-form-example-1]]
+===== Entity Edit Process Form Example 1
 
 The next form demonstrates the following case. There is an `Order` entity in the project. In the entity editor screen, there is a button that starts the order approval process programmatically. The start process button click handler may be as follows:
 
@@ -404,3 +404,96 @@ public class OrderEditTaskForm extends Screen implements ProcessFormContextAware
 <2> Load the `Order` entity with a given id and a proper view
 <3> To track the changes of the _order_ entity we must merge it to the DataContext  (see link:{cuba_doc_url}/gui_DataContext.html[Data Context] section of CUBA Manual)
 <4> When the _Complete Task_ button is clicked, the changes of the _Order_ entity are saved to the database and then the process task is completed
+
+[[entity-edit-process-form-example-2]]
+===== Entity Edit Process Form Example 2
+
+In the <<entity-edit-process-form-example-1>> we stored the entity identifier _orderId_ in process variables. We also can store an entity itself. We can start the process this way:
+
+[source, java]
+----
+@Subscribe("startProcessBtn")
+protected void onStartProcessBtnClick(Button.ClickEvent event) {
+    Order order = getEditedEntity();
+    Map<String, Object> processVariables = new HashMap<>();
+    processVariables.put("order", order); <1>
+    bprocRuntimeService.startProcessInstanceByKey("order-approval",
+            order.getNumber(),
+            processVariables);
+}
+----
+<1> Put the edited entity to the _order_ process variable.
+
+In the previous example we had to manually find the order entity using the id, then merge it to the data context and set to the data container. In case of having an entity among process variables, the process form  may be as follows. The XML descriptor is the same as in the previous example:
+
+.order-edit-task-form-2.xml
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="com.haulmont.bproc.ref.web.screens.forms.documentation.orderedit">
+    <data>
+        <instance id="orderDc"
+            class="com.haulmont.bproc.ref.entity.Order"
+            view="order-edit"/>
+        <collection id="clientsDc" class="com.haulmont.bproc.ref.entity.Client">
+            <loader>
+                <query><![CDATA[select c from ref_Client c]]></query>
+            </loader>
+        </collection>
+    </data>
+    <layout spacing="true">
+        <form dataContainer="orderDc">
+            <column>
+                <textField property="number"/>
+                <dateField property="date"/>
+                <lookupField property="client" optionsContainer="clientsDc"/>
+            </column>
+        </form>
+        <hbox spacing="true">
+            <button id="completeTaskBtn"
+                caption="msg://completeTask"
+                icon="font-icon:CHECK"/>
+        </hbox>
+    </layout>
+</window>
+----
+
+.OrderEditTaskForm2.java
+[source, java]
+----
+@ProcessForm
+@UiController("ref_OrderEditTaskForm2")
+@UiDescriptor("order-edit-task-form-2.xml")
+public class OrderEditTaskForm2 extends Screen implements ProcessFormContextAware {
+
+    @Inject
+    private CollectionLoader<Client> clientsDl;
+
+    private ProcessFormContext processFormContext;
+
+    @ProcessVariable <1>
+    @BindToDataContainer(container = "orderDc") <2>
+    private Order order;
+
+    @Override
+    public void setProcessFormContext(ProcessFormContext processFormContext) {
+        this.processFormContext = processFormContext;
+    }
+
+    @Subscribe
+    private void onBeforeShow(BeforeShowEvent event) {
+        clientsDl.load();
+    }
+
+    @Subscribe("completeTaskBtn")
+    protected void onCompleteTaskBtnClick(Button.ClickEvent event) {
+        getScreenData().getDataContext().commit();
+        processFormContext.completeTask();
+        closeWithDefaultAction();
+    }
+}
+----
+<1> We inject the _order_ variable. When we get a process variable of the _entity_ type it is reloaded with the _local view.
+<2> If the process variable is annotated with the `@BindToDataContainer`, then the entity is reloaded with the view of the corresponding data container, then the entity is merged to the data context and is set to the data container.
