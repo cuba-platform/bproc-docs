@@ -219,6 +219,101 @@ When you click the _Deploy process_ button in the model editor, the process will
 
 image::modeler-buttons-panel.png[]
 
+[[event-listener]]
+== Event Listeners
+
+When you need to get notified of some process engine event (task assigned, activity completed etc.) there are several approaches.
+
+First, you may define an execution listener or a task listener for the particular process node. See the link:{flowable_doc_url}#executionListeners[Execution Listener] section of Flowable documentation for details. In the execution listener editor, the dropdown list for selecting a class contains classes that implement the `org.flowable.engine.delegate.ExecutionListener` interface. In case of task listener there are classes implementing `org.flowable.engine.delegate.TaskListener` there. If the class contains link:{flowable_doc_url}#executionListenerFieldInjection[injected fields] then these fields will be automatically added to the _Fields_ section of the listener editor.
+
+Second, you can declare global event listeners provided by the Flowable framework (see the link:{flowable_doc_url}#eventDispatcher[Event handlers] in Flowable documentation). You'll find the _Event listeners_ section on the project properties panel. 
+
+The BProc addon additionally introduces a set of Spring application events (see the link:{cuba_doc_url}/events.html[Events] section in CUBA documentation). The following events are published:
+
+* UserTaskAssignedEvent
+* UserTaskCreatedEvent
+* UserTaskCompletedEvent
+* ActivityStartedEvent
+* ActivityCompletedEvent
+* ProcessStartedEvent
+* ProcessCompletedEvent
+
+Here is an example of event listener that sends an email notification each time a user task is assigned to a user:
+
+.TaskAssignedNotificationSender
+[source, java]
+----
+@Component(TaskAssignedNotificationSender.NAME)
+public class TaskAssignedNotificationSender {
+
+    public static final String NAME = "ref_TaskAssignedNotificationSender";
+
+    @Inject
+    protected EmailService emailService;
+
+    @EventListener <1>
+    protected void onTaskAssigned(UserTaskAssignedEvent event) { <2>
+        User user = event.getUser(); <3>
+        TaskData taskData = event.getTaskData(); <4>
+        String emailTitle = "New process task " + taskData.getName();
+        String emailBodyTemplatePath = "com/haulmont/bproc/ref/notification/task-email-body.template";
+        Map<String, Serializable> templateParameters = new HashMap<>();
+        templateParameters.put("user", user);
+        templateParameters.put("taskData", taskData);
+        EmailInfo emailInfo = new EmailInfo(
+                user.getEmail(),
+                emailTitle,
+                null,
+                emailBodyTemplatePath,
+                templateParameters
+        );
+        emailService.sendEmailAsync(emailInfo); <5>
+    }
+}
+----
+<1> Declares that the method is an event listener
+<2> The listener is fired each time the `UserTaskAssignedEvent` is published
+<3> The `UserTaskAssignedEvent` contains an information about the user who is assigned to the task
+<4> The `UserTaskAssignedEvent` contains a `TaskData` object which holds an information about the user task
+<5> See the link:{cuba_doc_url}/sending_emails_recipe.html[Email Sending Guide] for details
+
+The email body template may be as follows:
+
+.task-email-body.template
+[source]
+----
+Hi ${user.name}!
+The task "${taskData.name}" has been assigned.
+----
+
+If you need to get a process variable value in the listener you can do it this way:
+[source, java]
+----
+Order order = (Order) bprocRuntimeService.getVariable(event.getTaskData().getExecutionId(), "order");
+----
+
+By default, the listener is fired when the user task is assigned in any process. If you want to send notifications only for specific process definition you can either check the process definition in the listener method body:
+
+[source, java]
+----
+@EventListener
+protected void onOtherProcessTaskAssigned(UserTaskAssignedEvent event) {
+    if ("some-process".equals(event.getProcessDefinitionData().getKey())) {
+        // ...
+    }
+}
+----
+
+or you may define a SpEL (Spring Expression Language) expression that should match in order to handle the event:
+
+[source, java]
+----
+@EventListener(condition = "#event.processDefinitionData.key == 'some-process'")
+protected void onOtherProcessTaskAssigned(UserTaskAssignedEvent event) {
+    // ...
+}
+----
+
 [[administration-screens]]
 == Administration Screens
 

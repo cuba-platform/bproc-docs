@@ -403,4 +403,4 @@ public class OrderEditTaskForm extends Screen implements ProcessFormContextAware
 <1> The value of the _orderId_ variable will be injected to the field
 <2> Load the `Order` entity with a given id and a proper view
 <3> To track the changes of the _order_ entity we must merge it to the DataContext  (see link:{cuba_doc_url}/gui_DataContext.html[Data Context] section of CUBA Manual)
-<4> When the _Complete Task_ button is clicked, the changes of the _Order_ entity is saved to the database and then the process task is completed
+<4> When the _Complete Task_ button is clicked, the changes of the _Order_ entity are saved to the database and then the process task is completed
