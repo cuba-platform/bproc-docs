@@ -487,6 +487,8 @@ This means that all files with names ending with `.dmn.xml` and located under th
 
 Only files that were modified since last application start will be deployed.
 
+image::auto-deployment-dir-structure.png[]
+
 [[dmn]]
 == DMN
 
