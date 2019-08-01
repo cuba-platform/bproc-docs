@@ -1,7 +1,12 @@
 [[process-forms]]
 == Process Forms
 
-Process forms are screens displayed to users. They may be configured for `StartEvent` and `UserTask` model elements. There are two process form types: _CUBA screen_ and _Input dialog_.
+Process forms are screens displayed to users. They may be configured for `StartEvent` and `UserTask` model elements. There are several process form types: 
+
+* CUBA screen
+* Input dialog
+* No form
+* Custom
 
 [[input-dialog-process-form]]
 === Input Dialog Process Form
@@ -530,3 +535,69 @@ public class OrderEditTaskForm extends StandardEditor<Order> {
 <2> We inject the _order_ variable
 <3> By the time the `InitEvent` listener is fired, values of the `@ProcessVariable` fields must be already set. We invoke the `setEntityToEdit()` method of the `StandardEditor` class - this method reloads the `order` entity with the view required for the editor screen and sets the entity to the data container.
 <4> When the _Complete task_ button is clicked, the editor is commited, and if the commit was successful (all required fields are filled, etc.), the task completion is performed.
+
+[[custom-process-form]]
+=== Custom Process Form
+
+Custom process forms may be used if you need to render a form in a non-standard way. For custom process form the following fields may be provided:
+
+* form id
+* a list of form parameters
+* a list of outcomes
+
+If you use an alternative UI technology (e.g. react) then you'll need to get the form information and render the form using this information. Form information can be obtained using the `BprocFormService`. The `BprocFormService` has methods:
+
+* `FormData getStartFormData(String processDefinitionId)`
+* `FormData getTaskFormData(String taskId)`
+
+If you need to render custom forms in `Start Process` screen or `My Tasks` screen then you need to define and register the `ProcessFormScreenCreator` for the _custom_ form type:
+
+[source, java]
+----
+@Component("samples_MyCustomProcessFormScreenCreator")
+public class MyCustomProcessFormScreenCreator implements ProcessFormScreenCreator {
+
+    @Inject
+    private ScreenBuilders screenBuilders;
+
+    @Override
+    public Screen createStartProcessScreen(CreationContext creationContext) {
+        return screenBuilders.screen(creationContext.getFrameOwner())
+                .withScreenId(creationContext.getFormData().getScreenId())
+                .withOpenMode(OpenMode.DIALOG)
+                .build();
+    }
+
+    @Override
+    public Screen createUserTaskScreen(CreationContext creationContext) {
+        return screenBuilders.screen(creationContext.getFrameOwner())
+                .withScreenId(creationContext.getFormData().getScreenId())
+                .withOpenMode(OpenMode.DIALOG)
+                .build();
+    }
+}
+----
+
+Then this `ProcessFormScreenCreator` must be registered as a renderer creator of forms with type _custom_. This may be done on application startup using the `registerScreenCreator` method of the `ProcessFormScreenCreators` bean:
+
+[source, java]
+----
+@Component("samples_CustomFormScreenCreatorRegister")
+public class CustomFormScreenCreatorRegister {
+
+    @Inject
+    private ProcessFormScreenCreators processFormScreenCreators;
+
+    @Inject
+    private MyCustomProcessFormScreenCreator myCustomProcessFormScreenCreator;
+
+    @Inject
+    private Logger log;
+
+    @EventListener
+    public void appStarted(AppContextStartedEvent event) {
+        processFormScreenCreators.registerScreenCreator("custom", myCustomProcessFormScreenCreator);
+        log.info("MyCustomProcessFormScreenCreator registered");
+    }
+}
+----
