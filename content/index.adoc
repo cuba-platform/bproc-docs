@@ -472,18 +472,18 @@ BPMN processes and DMN tables may be automatically deployed on application start
 * `bproc.flowable.autoDeployBpmnResourcesLocationPattern` database application property defines the filter for searching BPMN models. The default property value is
 
 ```
-classpath*:resources/bpmn/**/*.bpmn20.xml
+classpath*:bproc/model/bpmn/**/*.bpmn20.xml
 ```
 
-This means that all files with names ending with `.bpmn20.xml` and located under the `resources\bpmn` package of the _core_ module will be deployed when the application is started.
+This means that all files with names ending with `.bpmn20.xml` and located under the `bproc/model/bpmn` package of the _core_ module will be deployed when the application is started.
 
 * `bproc.flowable.autoDeployDmnResourcesLocationPattern` database application property defines the filter for searching DMN table models. The default value is
 
 ```
-classpath*:resources/dmn/**/*.dmn.xml
+classpath*:bproc/model/dmn/**/*.dmn.xml
 ```
 
-This means that all files with names ending with `.dmn.xml` and located under the `resources\dmn` package of the _core_ module will be deployed when the application is started.
+This means that all files with names ending with `.dmn.xml` and located under the `bproc/model/dmn` package of the _core_ module will be deployed when the application is started.
 
 Only files that were modified since last application start will be deployed.
 
