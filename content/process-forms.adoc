@@ -256,6 +256,62 @@ public class ActorSelectionForm extends Screen {
 <3> Updates the lookup field caption with the value defined in the process model
 <4> Saves the value of the users lookup field to the process variable which name was defined in the form param in the modeler
 
+[[process-form-output-variables]]
+==== Process Form Output Variables
+
+In the _CUBA Screen_ process form, process variables can be set. For example, you may complete the task this way:
+
+[source, java]
+----
+processFormContext.taskCompletion()
+    .addProcessVariable("variableName", "variableValue") 
+    .complete();
+----
+
+When you model the process, it may be useful to know which variables are set by the form in order to reuse them later in the process model. A way to achieve this is to use the `outputVariabes` attribute of the `@ProcessForm` annotation:
+
+[source, java]
+----
+@ProcessForm(
+        outputVariables = {
+                @OutputVariable(name = "nextProcessActor", type = User.class),
+                @OutputVariable(name = "comment", type = String.class)
+        }
+)
+----
+
+Often there are cases when a process variable is set only when the task is completed using a particular outcome. To declare this, place the `outputVariables` annotation attribute to the `@Outcome` annotation. 
+
+[source, java]
+----
+@ProcessForm(
+        outcomes = {
+                @Outcome(
+                        id = "approve",
+                        outputVariables = {
+                                @OutputVariable(name = "nextActor", type = User.class) <1>
+                        }
+                ),
+                @Outcome(
+                        id = "reject",
+                        outputVariables = {
+                                @OutputVariable(name = "rejectionReason", type = String.class) <2>
+                        }
+                )
+        },
+        outputVariables = {
+                @OutputVariable(name = "comment", type = String.class) <3>
+        }
+)
+----
+<1> The `nextActor` variable may be set when the task is completed with the _approve_ outcome.
+<2> The `rejectionReason` variable may be set when the task is completed with the _reject__ outcome.
+<3> The `comment` variable may be set in any case.
+
+At the moment, this _output variables_ information is for the reference only. It is displayed in the corresponding section in the element properies panel when you select the process form:
+
+image::process-forms/output-variables-process-form.png[]
+
 [[restrict-process-form-usage]]
 ==== Restrict Process Form Usage
 
