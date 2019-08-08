@@ -186,6 +186,7 @@ User groups are managed using the _BProc > User groups_ screen. A single user ma
 
 image::accountants-user-group-edit.png[]
 
+[[service-task]]
 == Service Task
 
 Flowable engine gives you the following ways to declare how Java logic for the service task should be invoked:
@@ -196,7 +197,10 @@ Flowable engine gives you the following ways to declare how Java logic for the s
 
 See link:{flowable_doc_url}#bpmnJavaServiceTask[Java Service Task] in Flowable docs for details.
 
-The BProc addon adds one more way to do it. It allows you to select a Spring bean, the bean method and provide parameter values for the selected method. Bean name and methods are selected from dropdown lists. After a method is selected a panel for entering method argument values is displayed.
+[[spring-bean-service-task]]
+=== Spring Bean Service Task
+
+The BProc addon adds one more way to define a service task. It allows you to select a Spring bean, the bean method and provide parameter values for the selected method. Bean name and methods are selected from dropdown lists. After a method is selected a panel for entering method argument values is displayed.
 
 image::service-task-bean-properties.png[]
 
@@ -211,6 +215,56 @@ Pay an attention to the _is var_ checkbox. It makes sense mostly for string para
 `${ref_MyBean.someMethod('description')}` - this expression will use the *string value* _description_ to the method.
 
 `${ref_MyBean.someMethod(description)}` - this expression will use the *value of the variable* named _description_ to the method.
+
+[[java-delegate-service-task]]
+=== Java Delegate Service Task
+
+If you select the _JavaDelegate class_ in the _Type_ lookup then the _JavaDelegate class_ dropdown list field will appear. The list will contain a list of classes that implement the `org.flowable.engine.delegate.JavaDelegate` interface. See link:{flowable_doc_url}#bpmnJavaServiceTaskImplementation[Java Service Task Implementation] section of the Flowable documentation.
+
+If the selected JavaDelegate class contains fields of `org.flowable.common.engine.api.delegate.Expression` type (see link:{flowable_doc_url}#serviceTaskFieldInjection[Field Injection] in Flowable documentation) then field names will appear in the _Fields_ table.
+
+Here is an example of a Java class that sends an email:
+
+.SendEmailJavaDelegate.java
+[source, java]
+----
+public class SendEmailJavaDelegate implements JavaDelegate {
+
+    private Expression addressee; <1>
+    private Expression emailSubject;
+    private Expression emailBody;
+
+    private static Logger log = LoggerFactory.getLogger(SendEmailJavaDelegate.class);
+
+    @Override
+    public void execute(DelegateExecution execution) { <2>
+        User addresseeValue = (User) addressee.getValue(execution); <3>
+        if (addresseeValue == null || Strings.isNullOrEmpty(addresseeValue.getEmail())) {
+            log.error("Cannot evaluate addressee email");
+            return;
+        }
+        String emailSubjectValue = (String) emailSubject.getValue(execution);
+        String emailBodyValue = (String) emailBody.getValue(execution);
+        EmailService emailService = AppBeans.get(EmailService.class);
+        emailService.sendEmailAsync(new EmailInfo(addresseeValue.getEmail(),
+                emailSubjectValue,
+                emailBodyValue));
+    }
+}
+----
+<1> We declare three fields. Values of the fields are defined in the process model
+<2> The `execute` method is invoked when the process reaches the service task
+<3> Evaluate the value of the expression
+
+The properties panel for the service task will look this way:
+
+image::java-delegate-properties-panel.png[]
+
+Field editor:
+
+image::java-delegate-field-edit.png[]
+
+For the _addressee_ field we select the _expression_ field type. In our example the _manager_ process variable contains a user.
 
 [[model-drafts]]
 == Model Drafts
