@@ -110,7 +110,7 @@ image::quick-start/approved-sequence-flow-properties.png[]
 
 Do the same for the `rejected` sequence flow, but select a `reject` outcome value for it. 
 
-For the `Payment` task, we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option but first, we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
+For the `Payment` task, we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option but first, we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. The group code is `accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
 
 image::quick-start/accountants-user-group-edit.png[]
 
