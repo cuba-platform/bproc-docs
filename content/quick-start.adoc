@@ -154,7 +154,7 @@ Log in on behalf of any user who is a member of the `Accountants` user group. Op
 
 image::quick-start/my-tasks-payment.png[]
 
-All users of the `Accountants` group will see the `Payment` task among their group tasks until any of accountants claims it. Open the task form. The form is read only - you cannot do anything with the task until you claim it. On the bottom of the form there are two buttons: _Claim and continue_ and _Claim and close_. 
+All users of the `Accountants` group will see the `Payment` task among their group tasks until any of accountants claims it. Open the task form. The form is read only - you cannot do anything with the task until you claim it. On the bottom of the form there are two buttons: _Claim and resume_ and _Claim and close_. 
 
 image::quick-start/payment-task-claim-form.png[]
 
