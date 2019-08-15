@@ -74,6 +74,8 @@ public class MyUserProvider implements UserProvider {
 }
 ----
 
+NOTE: A `UserProvider` class must be placed to the *core* module.
+
 [[multi-instance-tasks]]
 === Multi-instance Tasks
 
@@ -110,13 +112,13 @@ Candidates are defined using _Candidate groups_ or _Candidate users_ fields on t
 In the _Candidate groups edit_ dialog, a _Group source_ should be defined. The possible group source values are:
 
 * _User groups_. A list of `UserGroup` should be selected. See the <<user-groups>> section for the information about user groups.
-* _User groups provider_. Use this type if the groups should be evaluated programmatically. A Spring bean that implements the `UserGroupListProvider` interface should be selected. The bean must implement the `List<UserGroup> get(String executionId)` method that evaluates and returns a list of user groups.
+* _User groups provider_. Use this type if the groups should be evaluated programmatically. A Spring bean that implements the `UserGroupListProvider` interface should be selected. The bean must implement the `List<UserGroup> get(String executionId)` method that evaluates and returns a list of user groups. The bean must be located in the *core* module.
 * _Expression_. Explicitly provide an expression used by the process engine. The expression should return a list o user group ids. It will be written to the `flowable:candidateGroups` attribute of the `<userTask>` element.
 
 In the _Candidate users edit_ dialog a _Users source_ should be defined. The possible source values are:
 
 * _Users_. A list of `User` should be selected.
-* _Users provider_. Use this type if the users list should be evaluated programmatically. A Spring bean that implements the `UserListProvider` interface should be selected. The bean must implement the `List<User> get(String executionId)` method that evaluates and returns a list of users.
+* _Users provider_. Use this type if the users list should be evaluated programmatically. A Spring bean that implements the `UserListProvider` interface should be selected. The bean must implement the `List<User> get(String executionId)` method that evaluates and returns a list of users. The bean must be located in the *core* module.
 * _Expression_. Explicitly provide an expression used by the process engine. The expression should return a list of user ids. It will be written to the `flowable:candidateUsers` attribute of the `<userTask>` element.
 
 [[user-task-outcomes]]
@@ -269,7 +271,7 @@ For the _addressee_ field we select the _expression_ field type. In our example 
 [[model-drafts]]
 == Model Drafts
 
-When you click the _Deploy process_ button in the model editor, the process will be deployed to the Flowable engine and will be available for starting. If you don't want it to be deployed and just want to save the process to get back to it later, then you can do it use the _Save draft_ button. To open a draft us the _Open draft_ button.
+When you click the _Deploy process_ button in the model editor, the process will be deployed to the Flowable engine and will be available for starting. If you don't want it to be deployed and just want to save the process to get back to it later, then you can do it use the _Save draft_ button. To open a draft use the _Open draft_ button.
 
 image::modeler-buttons-panel.png[]
 
