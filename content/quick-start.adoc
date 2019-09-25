@@ -26,13 +26,15 @@ Find the _Documentation_ text area in the properties panel and write a process d
 
 image::quick-start/process-documentation.png[]
 
-Click on the `StartEvent` element. Properties of the start event element will be displayed on the properties panel. The _Form_ section is used to describe a form that will be displayed to users when they start the process. There are three values available under the _Form type_ dropdown list:
+Click on the `StartEvent` element. Properties of the start event element will be displayed on the properties panel. The _Form_ section is used to describe a form that will be displayed to users when they start the process. There are several values available under the _Form type_ dropdown list:
 
 * _No form_ - a process should be started programmatically
 
 * _Input dialog_ - form fields are defined in the process model. The form is generated in the runtime when the user starts a process or completes a user task
 
-* _CUBA screen_ - a reference to a standard framework screen (see the <<process-forms>> section for details)
+* _CUBA screen_ - a reference to a standard framework screen (see the <<cuba-screen-process-form>> section for details)
+
+* _Custom_ - used if you need to render a form in a non-standard way (see the <<custom-process-form>> section for details)
 
 Let's specify the _Input dialog_ start process form. Select the _Input dialog_ form type.
 
@@ -44,11 +46,11 @@ Note that the _Process variable_ lookup field allows you to enter the value in i
 
 Create three more input dialog parameters:
 
-* _expenseAmount_ parameter with the `Decimal (double)` type
-* _expenseDate_ input dialog parameter with the `Date` type 
-* _document_ parameter with the `File` type.
+* _expenseAmount_ (type is `Decimal (double)`, editable and required)
+* _expenseDate_ (type is `Date`,  editable and required)
+* _document_ (type is `File`,  editable and required)
 
-After that create an input dialog parameter _manager_ with a `User` type. For the `User` type, additional fields are displayed in the editor: they are used for specifying a UI component for user selection (lookup field or picker field) and an optional JPQL query for filling the lookup field or a screen for selecting users in case of picker fields. We'll use the `LookupField` component and will leave the _JPQL query_ field blank - that means that the default query `select e from sec$User e` will be used.
+After that create an input dialog parameter _manager_ with a `User` type (it must be required and editable). For the `User` type, additional fields are displayed in the editor: they are used for specifying a UI component for user selection (lookup field or picker field) and an optional JPQL query for filling the lookup field or a screen for selecting users in case of picker fields. We'll use the `LookupField` component and will leave the _JPQL query_ field blank - that means that the default query `select e from sec$User e` will be used.
 
 image::quick-start/manager-field-editor.png[]
 
@@ -82,11 +84,11 @@ Create a new input dialog parameter and in the _Process variable_ dropdown list 
 
 image::quick-start/existing-variable-input-dialog-param-edit.png[]
 
-You can make it non-editable by unselecting the _Editable_ checkbox.
+Make the field non-editable by unselecting the _Editable_ checkbox.
 
-In the same way create input dialog parameters for `expenseAmount`, `expenseAmount`, `expenseDate` and `document` variables.
+In the same way create input dialog parameters for `expenseAmount`, `expenseDate` and `document` variables. They all must be non-editable.
 
-Add a new dialog parameter with the `comment` process variable name and the `Multiline string` type. This field will be used by the manager to make some notes when approving or rejecting the refund request.
+Add a new dialog parameter with the `comment` process variable name and the `Multiline string` type. The field must be editable and non-required. This field will be used by the manager if the manager wants to make some notes when approving or rejecting the refund request.
 
 At the `Approval` step, the manager has two options: to `Approve` and to `Reject` the request. An easy way to support this is to use outcomes (for details see <<user-task-outcomes>>). For each outcome a button will be displayed on the form and the result will be stored in a special process variable.
 
@@ -110,7 +112,7 @@ image::quick-start/approved-sequence-flow-properties.png[]
 
 Do the same for the `rejected` sequence flow, but select a `reject` outcome value for it. 
 
-For the `Payment` task, we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option but first, we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
+For the `Payment` task, we will implement the following behavior: the task should be displayed for all accountants and any of them will be able to take this task for himself. To achieve this we should not specify a particular assignee for the user task but should specify _Candidate groups_ or _Candidate users_. We'll use the _Candidate groups_ option but first, we must create a user group for accountants. User groups are managed using the _BProc > User Groups_ screen (read more about user groups here: <<user-groups>>). Open the user groups screen and create a new group called `Accountants`. The group code is `accountants`. Change group type to `Users` and add several users to the group. Commit the screen and go back to the modeler. 
 
 image::quick-start/accountants-user-group-edit.png[]
 
@@ -118,7 +120,7 @@ In the modeler click the edit button near the _Candidate groups_ field. The dial
 
 image::quick-start/payment-task-candidate-groups.png[]
 
-Configure an input dialog for the `Payment` task. Add existing `requestNumber`, `expenseAmount`, `expenseDate`, `document` and `comment` fields.
+Configure an input dialog for the `Payment` task. Add existing `requestNumber`, `expenseAmount`, `expenseDate`, `document` and `comment` fields. Make them all non-editable.
 
 The last thing we need do is to specify who can start this process. Click on the free space on the canvas to display process properties. Similar to the `Payment` task we'll define _Candidate groups_ in the _Starter candidates_ section. 
 
@@ -152,7 +154,7 @@ Log in on behalf of any user who is a member of the `Accountants` user group. Op
 
 image::quick-start/my-tasks-payment.png[]
 
-All users of the `Accountants` group will see the `Payment` task among their group tasks until any of accountants claims it. Open the task form. The form is read only - you cannot do anything with the task until you claim it. On the bottom of the form there are two buttons: _Claim and continue_ and _Claim and close_. 
+All users of the `Accountants` group will see the `Payment` task among their group tasks until any of accountants claims it. Open the task form. The form is read only - you cannot do anything with the task until you claim it. On the bottom of the form there are two buttons: _Claim and resume_ and _Claim and close_. 
 
 image::quick-start/payment-task-claim-form.png[]
 

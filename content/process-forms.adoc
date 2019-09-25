@@ -498,7 +498,7 @@ public class TaskApprovalForm extends Screen {
 
 This example demonstrates how to use a `StandardEditor` as a process form. This may be useful in a case when you store some entity in a process variable and want to view or edit entity fields using the task process form.
 
-Let's suppose that we started the process programmatically and passed the `Order` entity instance to the process variables.
+Let's suppose that we added a "Start process" button to the standard `Order` entity editor. The "Start process" button starts the process programmatically and puts the edited `Order` entity instance to the process variables.
 
 [source, java]
 ----
@@ -514,7 +514,7 @@ protected void onStartProcessBtnClick(Button.ClickEvent event) {
 ----
 <1> Put the edited entity to the _order_ process variable.
 
-The xml descriptor may look like this:
+The xml descriptor of the process form that is defined for the next user task may look like this:
 
 .order-edit-task-form.xml
 [source, xml]
@@ -554,6 +554,8 @@ The xml descriptor may look like this:
 
 ----
 <1> The only thing that differs the form XML descriptor from regular entity editor is that we replaced the _editActions_ panel ("Ok" and "Cancel" buttons) with the panel that contains a _Complete task_ button.
+
+Process form java controller:
 
 .OrderEditTaskForm.java
 [source, java]
@@ -657,3 +659,5 @@ public class CustomFormScreenCreatorRegister {
     }
 }
 ----
+
+NOTE: A `ProcessFormScreenCreator` and a bean that registers a `ProcessFormScreenCreator` must be located in the *web* module.
