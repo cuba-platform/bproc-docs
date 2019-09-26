@@ -24,9 +24,9 @@
 [[introduction]]
 == Introduction
 
-_BProc_ addon is used for modeling and running business processes. Processes are described using BPMN 2.0 notation. The addon uses https://flowable.org/[Flowable] as a business process engine and https://bpmn.io/[bpmn-js] rendering toolkit for process modeling.
+*BProc* add-on is used for modeling and running business processes. Processes are described using BPMN 2.0 notation. The add-on uses https://flowable.org/[Flowable] as a business process engine and https://bpmn.io/[bpmn-js] rendering toolkit for process modeling.
 
-This manual mostly describes features added by the addon, not features provided by underlying frameworks, so you must be familiar with the https://www.flowable.org/docs/userguide/index.html[Flowable] engine.
+This manual mostly describes features added by the add-on, not features provided by underlying frameworks, so you must be familiar with the https://www.flowable.org/docs/userguide/index.html[Flowable] engine.
 
 include::quick-start.adoc[]
 
@@ -38,18 +38,18 @@ include::process-forms.adoc[]
 [[single-user-assignment]]
 === Single User Assignment
 
-There are several ways to specify a task assignee. You can find them if you expand the _Assignee source_ dropdown list on the UserTask element properties panel.
+There are several ways to specify a task assignee. You can expand the *Assignee source* drop-down list on the UserTask element properties panel and find the follows:
 
-"Expression" Assignee Source::
-
-You will need to write an expression that evaluates an id of the User who must be an assignee. If you know that a user entity is stored in a process variable called _manager_ then the expression will be `${manager.id}`. You also may invoke Spring bean method that returns a user id: `${demo_MyBean.evaluateManager(methodParam1, 'methodParam2')}`
-
-"Process variable" Assignee Source::
-
-If you select the _Process variable_ assignee source then a LookupField component will be displayed in the element properties panel. This lookup field will contain all process variables with the _User_ type (input dialog parameters with the _User_ type and process variables with the _User_ type defined in the _Start event_ properties panel). A process may be started programmatically without using the start process form and process variables values may be passed using the API. In this case, if you need to assign a user task to the person from one of the process variables, you can either write an explicit expression for the assignee or add an info about the process variable to the _Process variables_ section.
-
-"User provider" Assignee Source::
-
+* *Expression*
++
+You will need to write an expression that evaluates an id of the User who must be an assignee. If you know that a user entity is stored in a process variable called `manager` then the expression will be `${manager.id}`. You also may invoke Spring bean method that returns a user id: `${demo_MyBean.evaluateManager(methodParam1, 'methodParam2')}`
++
+* *Process variable*
++
+If you select the `Process variable` assignee source then the *LookupField* component will be displayed in the element properties panel. This lookup field will contain all process variables with the `User` type (input dialog parameters with the `User` type and process variables with the `User` type defined in the *Start event* properties panel). A process may be started programmatically without using the start process form and process variables values may be passed using the API. In this case, if you need to assign a user task to the person from one of the process variables, you can either write an explicit expression for the assignee or add an info about the process variable to the *Process variables* section.
++
+* *User provider*
++
 If the assignee is evaluated in runtime you may use a user provider. User providers are Spring beans that implement the `UserProvider` interface. An interface has a `User get(String executionId)` method. The method returns a User who should become a task assignee. Here is an example of a user provider that reads a process variable with the user login and finds a user with this login in the database.
 +
 [source,java]
@@ -74,7 +74,7 @@ public class MyUserProvider implements UserProvider {
 }
 ----
 
-NOTE: A `UserProvider` class must be placed to the *core* module.
+TIP: A `UserProvider` class must be placed to the *core* module.
 
 [[multi-instance-tasks]]
 === Multi-instance Tasks
@@ -92,39 +92,39 @@ Let's look at the user tasks element in process XML:
 </userTask>
 ----
 
-In the modeler, you'll have to fill the expression for the _collection_ field of the _multiInstanceLoopCharacteristics_ element and the _elementVariable_ field. After that use the _elementVariable_ value as an _assignee_ for the user task element.
+In the modeler, you'll have to fill the expression for the *Collection* field of the *multiInstanceLoopCharacteristics* element and the *elementVariable* field. After that use the `elementVariable` value as an `assignee` for the user task element.
 
-BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process, and some other elements) has a _Multi-instance_ section in the properties panel. When you change the multi-instance type from _None_ to _Parallel_ or _Sequential_, new fields appear on the panel. Let's suppose that in the start process form you defined a field _lawyers_ with the _User list_ type. This field value holds a collection of users. For the current user task you may select a _Process variable_ collection source and then select a _lawyers_ field in the _Process variable_ lookup.
+BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process, and some other elements) has a *Multi instance* section in the properties panel. When you change the multi-instance type from *None* to *Parallel* or *Sequential*, new fields appear on the panel. Let's suppose that in the start process form you defined a field `lawyers` with the `User list` type. This field value holds a collection of users. For the current user task you may select a *Process variable* collection source and then select a `lawyers` field in the *Process variable* lookup.
 
 image::multi-instance-panel.png[]
 
-If you do that the system will suggest you fill _collection_, _elementVariable_ and _assignee_ fields mentioned above automatically.
+If you do that the system will suggest you fill *Сollection*, *Element variable* and *Assignee expression* fields mentioned above automatically.
 
 image::collection-expression-changed-dialog.png[]
 
 [[task-candidate-users-and-groups]]
 === Task Candidate Users and Groups
 
-For the user task you may specify a list of potential task assignees (see the link:{flowable_doc_url}#bpmnUserTaskAssignment[User assignment] section of the Flowable documentation). A task with candidates appears in the _group tasks_ list for each candidate. After any of the candidates _claims_ the task, the task moves to the _assigned_ task list of the user who claimed the task and disappears from the group tasks list of other candidates.
+For the user task you may specify a list of potential task assignees (see the link:{flowable_doc_url}#bpmnUserTaskAssignment[User assignment] section of the Flowable documentation). A task with candidates appears in the *Group tasks* list for each candidate. After any of the candidates claims the task, the task moves to the *Assigned tasks* list of the user who claimed the task and disappears from the *Group tasks* list of other candidates.
 
-Candidates are defined using _Candidate groups_ or _Candidate users_ fields on the user task properties panel.
+Candidates are defined using *Candidate groups* or *Candidate users* fields on the user task properties panel.
 
-In the _Candidate groups edit_ dialog, a _Group source_ should be defined. The possible group source values are:
+In the *Candidate groups edit* dialog, the *Group source* should be defined. The possible group source values are:
 
-* _User groups_. A list of `UserGroup` should be selected. See the <<user-groups>> section for the information about user groups.
-* _User groups provider_. Use this type if the groups should be evaluated programmatically. A Spring bean that implements the `UserGroupListProvider` interface should be selected. The bean must implement the `List<UserGroup> get(String executionId)` method that evaluates and returns a list of user groups. The bean must be located in the *core* module.
-* _Expression_. Explicitly provide an expression used by the process engine. The expression should return a list o user group ids. It will be written to the `flowable:candidateGroups` attribute of the `<userTask>` element.
+* *User groups*. A list of `UserGroup` should be selected. See the <<user-groups>> section for the information about user groups.
+* *User groups provider*. Use this type if the groups should be evaluated programmatically. A Spring bean that implements the `UserGroupListProvider` interface should be selected. The bean must implement the `List<UserGroup> get(String executionId)` method that evaluates and returns a list of user groups. The bean must be located in the *core* module.
+* *Expression*. Explicitly provide an expression used by the process engine. The expression should return a list o user group ids. It will be written to the `flowable:candidateGroups` attribute of the `<userTask>` element.
 
-In the _Candidate users edit_ dialog a _Users source_ should be defined. The possible source values are:
+In the *Candidate users edit* dialog the *Users source* should be defined. The possible source values are:
 
-* _Users_. A list of `User` should be selected.
-* _Users provider_. Use this type if the users list should be evaluated programmatically. A Spring bean that implements the `UserListProvider` interface should be selected. The bean must implement the `List<User> get(String executionId)` method that evaluates and returns a list of users. The bean must be located in the *core* module.
-* _Expression_. Explicitly provide an expression used by the process engine. The expression should return a list of user ids. It will be written to the `flowable:candidateUsers` attribute of the `<userTask>` element.
+* *Users*. A list of `User` should be selected.
+* *Users provider*. Use this type if the users list should be evaluated programmatically. A Spring bean that implements the `UserListProvider` interface should be selected. The bean must implement the `List<User> get(String executionId)` method that evaluates and returns a list of users. The bean must be located in the *core* module.
+* *Expression*. Explicitly provide an expression used by the process engine. The expression should return a list of user ids. It will be written to the `flowable:candidateUsers` attribute of the `<userTask>` element.
 
 [[user-task-outcomes]]
 === User Task Outcomes
 
-When users complete user tasks they often have to make some decision (approve or reject, yes or no, etc.). After they do it, the process should go one or another way. You may use task outcomes for modeling such cases. For _Input dialog_ process forms outcomes are defined in the _Outcomes_ panel in the _Form_ properties section, for _CUBA screen_ forms the outcomes are defined in the form controller.
+When users complete user tasks they often have to make some decision (approve or reject, yes or no, etc.). After they do it, the process should go one or another way. You may use task outcomes for modeling such cases. For *Input dialog* process forms outcomes are defined in the *Outcomes* panel in the *Form* properties section, for *CUBA screen* forms the outcomes are defined in the form controller.
 
 image::outcomes-panel.png[]
 
@@ -142,25 +142,25 @@ As an example of how to use outcomes let's take the process:
 
 image::outcomes-application-process.png[]
 
-The _Application approval_ task has two outcomes: _approve_ and _reject_. We need to specify conditions for sequence flows after the exclusive gateway element.
+The *Application approval* task has two outcomes: `approve` and `reject`. We need to specify conditions for sequence flows after the exclusive gateway element.
 
-The first option is to write a condition expression. The second one is to select an outcome from the dropdown list.
+The first option is to write a condition expression. The second one is to select an outcome from the drop-down list.
 
-Change the _Condition source_ to the _Task outcome_ and select the task and its outcome in dropdown lists:
+Change the *Condition source* to the *Task outcome* and select the task and its outcome in drop-down lists:
 
 image::outcome-sequence-flow-dropdown.png[]
 
 If the user task is a multi-instance task then you'll need to specify an additional parameter for a sequence flow condition:
 
-This parameter is _Condition type_. It has several possible values:
+This parameter is *Condition type*. It has several possible values:
 
-* Anyone completed with the outcome
-* Everyone completed with the outcome
-* No one completed with the outcome
+* Anyone completed with the outcome.
+* Everyone completed with the outcome.
+* No one completed with the outcome.
 
 image::outcome-sequence-flow-dropdown-multi-instance.png[]
 
-For the screenshot above, the process will continue its execution using this sequence flow only if all of the parallel approvers completed the task with the _approve_ outcome.
+For the screenshot above, the process will continue its execution using this sequence flow only if all of the parallel approvers completed the task with the `approve` outcome.
 
 [[pools-and-lanes]]
 == Pools and Lanes
@@ -169,22 +169,22 @@ If the process model uses pools and lanes then assignees can be defined not for 
 
 image::order-process-lanes.png[]
 
-If you select the lane, e.g. _Manager_ then you'll be able to define an assignee for the lane:
+If you select the lane, e.g. *Manager* then you'll be able to define an assignee for the lane:
 
 image::lane-properties-panel.png[]
 
 All user tasks on the lane without explicitly defined assignee will inherit the assignee value from the lane.
 
-To display and edit process properties click on the _pool_ element.
+To display and edit process properties click on the *pool* element.
 
 [[user-groups]]
 == User Groups
 
-User groups are managed using the _BProc > User groups_ screen. A single user may be a member of many groups. A group can have one of the following types:
+User groups are managed using the *BProc > User groups* screen. A single user may be a member of many groups. A group can have one of the following types:
 
-* _Users_. For the group of _Users_ type users should be explicitly selected.
-* _Roles_. For the group of _Roles_ type a set of security roles should be defined. Users are considered to be a member of the user group if they have one of the selected roles.
-* _All users_. Group of this type will automatically contain all users.
+* *Users*. For the group of *Users* type users should be explicitly selected.
+* *Roles*. For the group of *Roles* type a set of security roles should be defined. Users are considered to be a member of the user group if they have one of the selected roles.
+* *All users*. Group of this type will automatically contain all users.
 
 image::accountants-user-group-edit.png[]
 
@@ -193,16 +193,16 @@ image::accountants-user-group-edit.png[]
 
 Flowable engine gives you the following ways to declare how Java logic for the service task should be invoked:
 
-* Specifying a class that implements `JavaDelegate` or `ActivityBehavior`
-* Evaluating an expression that resolves to a delegation object
-* Invoking a method expression
+* Specifying a class that implements `JavaDelegate` or `ActivityBehavior`.
+* Evaluating an expression that resolves to a delegation object.
+* Invoking a method expression.
 
 See link:{flowable_doc_url}#bpmnJavaServiceTask[Java Service Task] in Flowable docs for details.
 
 [[spring-bean-service-task]]
 === Spring Bean Service Task
 
-The BProc addon adds one more way to define a service task. It allows you to select a Spring bean, the bean method and provide parameter values for the selected method. Bean name and methods are selected from dropdown lists. After a method is selected a panel for entering method argument values is displayed.
+*BProc* add-on adds one more way to define a service task. It allows you to select a Spring bean, the bean method and provide parameter values for the selected method. Bean name and methods are selected from drop-down lists. After a method is selected a panel for entering method argument values is displayed.
 
 image::service-task-bean-properties.png[]
 
@@ -212,18 +212,18 @@ The panel for the Spring bean helps to build an expression for bean method invoc
 ${ref_VacancyService.publishOnWebsite('Java Developer', fileVar)}
 ....
 
-Pay an attention to the _is var_ checkbox. It makes sense mostly for string parameters. If the checkbox is not selected then the argument value will be written to the resulting expression in apostrophes. If the checkbox is selected the no apostrophes will be added and a variable with a provided name will be passed to the method.
+Pay attention to the *is var* check box. It makes sense mostly for string parameters. If the check box is not selected then the argument value will be written to the resulting expression in apostrophes. If the check box is selected the no apostrophes will be added and a variable with a provided name will be passed to the method.
 
-`${ref_MyBean.someMethod('description')}` - this expression will use the *string value* _description_ to the method.
+`${ref_MyBean.someMethod('description')}` - this expression will use the *string value* description to the method.
 
-`${ref_MyBean.someMethod(description)}` - this expression will use the *value of the variable* named _description_ to the method.
+`${ref_MyBean.someMethod(description)}` - this expression will use the *value of the variable* named description to the method.
 
 [[java-delegate-service-task]]
 === Java Delegate Service Task
 
-If you select the _JavaDelegate class_ in the _Type_ lookup then the _JavaDelegate class_ dropdown list field will appear. The list will contain a list of classes that implement the `org.flowable.engine.delegate.JavaDelegate` interface. See link:{flowable_doc_url}#bpmnJavaServiceTaskImplementation[Java Service Task Implementation] section of the Flowable documentation.
+If you select the `JavaDelegate class` in the *Type* lookup then the *JavaDelegate class* drop down list field will appear. The list will contain a list of classes that implement the `org.flowable.engine.delegate.JavaDelegate` interface. See link:{flowable_doc_url}#bpmnJavaServiceTaskImplementation[Java Service Task Implementation] section of the Flowable documentation.
 
-If the selected JavaDelegate class contains fields of `org.flowable.common.engine.api.delegate.Expression` type (see link:{flowable_doc_url}#serviceTaskFieldInjection[Field Injection] in Flowable documentation) then field names will appear in the _Fields_ table.
+If the selected JavaDelegate class contains fields of `org.flowable.common.engine.api.delegate.Expression` type (see link:{flowable_doc_url}#serviceTaskFieldInjection[Field Injection] in Flowable documentation) then field names will appear in the `Fields` table.
 
 Here is an example of a Java class that sends an email:
 
@@ -254,9 +254,9 @@ public class SendEmailJavaDelegate implements JavaDelegate {
     }
 }
 ----
-<1> We declare three fields. Values of the fields are defined in the process model
-<2> The `execute` method is invoked when the process reaches the service task
-<3> Evaluate the value of the expression
+<1> We declare three fields. Values of the fields are defined in the process model.
+<2> The `execute` method is invoked when the process reaches the service task.
+<3> Evaluate the value of the expression.
 
 The properties panel for the service task will look this way:
 
@@ -266,12 +266,12 @@ Field editor:
 
 image::java-delegate-field-edit.png[]
 
-For the _addressee_ field we select the _expression_ field type. In our example the _manager_ process variable contains a user.
+For the `addressee` field we select the `expression` field type. In our example the `manager` process variable contains a user.
 
 [[model-drafts]]
 == Model Drafts
 
-When you click the _Deploy process_ button in the model editor, the process will be deployed to the Flowable engine and will be available for starting. If you don't want it to be deployed and just want to save the process to get back to it later, then you can do it use the _Save draft_ button. To open a draft use the _Open draft_ button.
+When you click the *Deploy process* button in the model editor, the process will be deployed to the Flowable engine and will be available for starting. If you don't want it to be deployed and just want to save the process to get back to it later, then you can do it use the *Save draft* button. To open a draft use the *Open draft* button.
 
 image::modeler-buttons-panel.png[]
 
@@ -280,11 +280,11 @@ image::modeler-buttons-panel.png[]
 
 When you need to get notified of some process engine event (task assigned, activity completed etc.) there are several approaches.
 
-First, you may define an execution listener or a task listener for the particular process node. See the link:{flowable_doc_url}#executionListeners[Execution Listener] section of Flowable documentation for details. In the execution listener editor, the dropdown list for selecting a class contains classes that implement the `org.flowable.engine.delegate.ExecutionListener` interface. In case of task listener there are classes implementing `org.flowable.engine.delegate.TaskListener` there. If the class contains link:{flowable_doc_url}#executionListenerFieldInjection[injected fields] then these fields will be automatically added to the _Fields_ section of the listener editor.
+First, you may define an execution listener or a task listener for the particular process node. See the link:{flowable_doc_url}#executionListeners[Execution Listener] section of Flowable documentation for details. In the execution listener editor, the drop-down list for selecting a class contains classes that implement the `org.flowable.engine.delegate.ExecutionListener` interface. In case of task listener there are classes implementing `org.flowable.engine.delegate.TaskListener` there. If the class contains link:{flowable_doc_url}#executionListenerFieldInjection[injected fields] then these fields will be automatically added to the *Fields* section of the listener editor.
 
-Second, you can declare global event listeners provided by the Flowable framework (see the link:{flowable_doc_url}#eventDispatcher[Event handlers] in Flowable documentation). You'll find the _Event listeners_ section on the project properties panel. 
+Second, you can declare global event listeners provided by the Flowable framework (see the link:{flowable_doc_url}#eventDispatcher[Event handlers] in Flowable documentation). You'll find the *Event listeners* section on the project properties panel. 
 
-The BProc addon additionally introduces a set of Spring application events (see the link:{cuba_doc_url}/events.html[Events] section in CUBA documentation). The following events are published:
+*BProc* add-on additionally introduces a set of Spring application events (see the link:{cuba_doc_url}/events.html[Events] section in CUBA documentation). The following events are published:
 
 * UserTaskAssignedEvent
 * UserTaskCreatedEvent
@@ -327,11 +327,11 @@ public class TaskAssignedNotificationSender {
     }
 }
 ----
-<1> Declares that the method is an event listener
-<2> The listener is fired each time the `UserTaskAssignedEvent` is published
-<3> The `UserTaskAssignedEvent` contains an information about the user who is assigned to the task
-<4> The `UserTaskAssignedEvent` contains a `TaskData` object which holds an information about the user task
-<5> See the link:{cuba_doc_url}/sending_emails_recipe.html[Email Sending Guide] for details
+<1> Declares that the method is an event listener.
+<2> The listener is fired each time the `UserTaskAssignedEvent` is published.
+<3> The `UserTaskAssignedEvent` contains an information about the user who is assigned to the task.
+<4> The `UserTaskAssignedEvent` contains a `TaskData` object which holds an information about the user task.
+<5> See the link:{cuba_doc_url}/sending_emails_recipe.html[Email Sending Guide] for details.
 
 The email body template may be as follows:
 
@@ -376,7 +376,7 @@ protected void onOtherProcessTaskAssigned(UserTaskAssignedEvent event) {
 [[process-definitions-screen]]
 === Process Definitions Screen
 
-Process definition editor displays process definition entity properties, BPMN XML, active process instances of the selected process definition version. To change the process definition version use the _Version_ lookup field.
+Process definition editor displays process definition entity properties, BPMN XML, active process instances of the selected process definition version. To change the process definition version use the *Version* lookup field.
 
 From the editor, you also can suspend the process definition (the process will not be available for starting until you activate it). In the suspend process definition dialog, you have an option to suspend running process instances as well. In this case, user tasks of suspended instances won't be displayed in the tasks list, all timers and jobs won't be executed.
 
@@ -387,34 +387,34 @@ Read the <<process-instances-migration>> section to get information about proces
 [[process-instances-screen]]
 === Process Instances Screen
 
-Process instances browser screen may display both active and completed process instances. To switch between them, change the value of the _State_ lookup in the filter and click the _Apply_ button.
+Process instances browser screen may display both active and completed process instances. To switch between them, change the value of the *State* lookup in the filter and click the *Apply* button.
 
 In the process instance editor, using actions buttons, you can <<process-instances-migration,migrate>> an instance to a new process definition version, suspend an instance or remove it at all.
 
-The _Runtime_ tab is available only for active process instances and contains information about current process state: active user tasks, execution tree, variable values, failed jobs.
+The *Runtime* tab is available only for active process instances and contains information about current process state: active user tasks, execution tree, variable values, failed jobs.
 
 image::process-instance-edit.png[]
 
-Selecting items in executions tree will modify content of _Variables_ and _Tasks_ tabs. If you select a particular execution, only objects related to this execution will be displayed .
+Selecting items in executions tree will modify content of *Variables* and *Tasks* tabs. If you select a particular execution, only objects related to this execution will be displayed .
 
-Using the _Variables_ tab You can create, modify and remove process variables. Note, that when you create a new process variable it will be put to the selected execution (if selected).
+Using the *Variables* tab You can create, modify and remove process variables. Note, that when you create a new process variable it will be put to the selected execution (if selected).
 
 image::process-instance-create-variable.png[]
 
-Using the _User tasks_ tab you can view a list of active tasks and reassign tasks to other users.
+Using the *User tasks* tab you can view a list of active tasks and reassign tasks to other users.
 
-The _Failed jobs_ tab displays a list of jobs that failed with an error. For example, if some service task method threw an exception, this service task will appear in the failed jobs list. From the UI you will be able to see the exception stacktrace and restore the failed job after the cause of the error is fixed.
+The *Failed jobs* tab displays the list of jobs that failed with an error. For example, if some service task method threw an exception, this service task will appear in the failed jobs list. From the UI you will be able to see the exception stacktrace and restore the failed job after the cause of the error is fixed.
 
 image::failed-job-edit.png[]
 
-The _History_ tab contains history information: a list of all user tasks (completed and active), a full list of completed activities and last values of process variables. The _History_ tab is available both for active and for completed process instances.
+The *History* tab contains history information: a list of all user tasks (completed and active), a full list of completed activities and last values of process variables. The *History* tab is available both for active and for completed process instances.
 
 [[user-tasks-screen]]
 === User Tasks Screen
 
 The screen displays all active user tasks. On the top of the screen, you can filter tasks using various criteria: process definition, task assignee, task candidate, etc.
 
-With the help of this screen you can, for example, find all tasks assigned to some user and reassign them all to another person.
+With the help of this screen you can, for example, find all tasks assigned to a user and reassign them all to another person.
 
 image::all-user-tasks-screen.png[]
 
@@ -423,18 +423,18 @@ image::all-user-tasks-screen.png[]
 
 After a process model is modified and a new process definition version is deployed, all existing process instances continue using an older version of the process definition. If necessary you can migrate them to the new process definition version.
 
-If you need to migrate all process instances, open the process definition editor, select a required version in the lookup field and click the _Migrate all instances_ button. Before the migration is performed, all instances are validated, and if any instance cannot be migrated, information window is displayed.
+If you need to migrate all process instances, open the process definition editor, select a required version in the lookup field and click the *Migrate all instances* button. Before the migration is performed, all instances are validated, and if any instance cannot be migrated, information window is displayed.
 
-To migrate a single instance, find it in the _Process Instances_ screen, open the process instance editor and click the _Migrate_ button.
+To migrate a single instance, find it in the *Process Instances* screen, open the *Process Instance Editor* and click the *Migrate* button.
 
 For more details about the process instance migration see the link:{flowable_doc_url}#_process_instance_migration_experimental[Process Instance Migration] section of the Flowable documentation.
 
 [[bproc-api]]
 == BProc API
 
-The Flowable engine is added as a dependency to the _core_ module of BProc addon (see link:{cuba_doc_url}/app_modules.html[Application Modules] of CUBA Manual). This means that the code in the _core_ module can use the link:{flowable_doc_url}#chapterApi[Flowable API] directly.
+The Flowable engine is added as a dependency to the *core* module of BProc add-on (see link:{cuba_doc_url}/app_modules.html[Application Modules] of CUBA Manual). This means that the code in the *core* module can use the link:{flowable_doc_url}#chapterApi[Flowable API] directly.
 
-In the _web_ module the Flowable API is not available. If you need to work with a process from the _web_ module, e.g. from a screen controller, you should use the BProc API (this API is also available in the _core_ module, so it can be used everywhere). BProc API is very similar to the Flowable API, many of its methods repeat contracts of Flowable services and invoke Flowable services under the hood.
+In the *web* module the Flowable API is not available. If you need to work with a process from the *web* module, e.g. from a screen controller, you should use the BProc API (this API is also available in the *core* module, so it can be used everywhere). BProc API is very similar to the Flowable API, many of its methods repeat contracts of Flowable services and invoke Flowable services under the hood.
 
 BProc provides the following services:
 
@@ -448,7 +448,7 @@ BProc provides the following services:
 [[starting-the-process-programmatically]]
 === Starting the Process Programmatically
 
-You may want to start processes not from the _Start Process_ screen, but from the regular entity editor. Let's say, we have the `Order` entity editor. The `Order` entity has the `manager` field of the `User` type. In the process we're going to start, some user task should be assigned to the order manager, so we must store the manager in a proper process variable. To start the process use the `BprocRuntimeService`.
+You may want to start processes not from the *Start Process* screen, but from the regular entity editor. Let's say, we have the `Order` entity editor. The `Order` entity has the `manager` field of the `User` type. In the process we're going to start, some user task should be assigned to the order manager, so we must store the manager in a proper process variable. To start the process use the `BprocRuntimeService`.
 
 If the order editor screen has a button with an id `startProcessBtn`, then a button click listener that starts the process will look like this:
 
@@ -466,17 +466,17 @@ protected void onStartProcessBtnClick(Button.ClickEvent event) {
             processVariables); <6>
 }
 ----
-<1> We put an edited entity id to the process variable with the _orderId_ name. Later we will be able to find the related process instance and user tasks using this variable value.
-<2> The _approver_ variable is used for the user task assignment.
+<1> We put an edited entity id to the process variable with the `orderId` name. Later we will be able to find the related process instance and user tasks using this variable value.
+<2> The `approver` variable is used for the user task assignment.
 <3> To start the process we use the `BprocRuntimeService`.
-<4> _order-approval_ is the process definition key.
+<4> `order-approval` is the process definition key.
 <5> The order number is used as an optional process instance business key. It is not required to use business keys in general case.
 <6> The third method argument is a process variables map (contains an order id and the approver user).
 
 [[getting-a-list-of-process-instances]]
 === Getting a List of Process Instances
 
-The next snippet can be used inside the order entity editor to get a list of process instances of _order-approval_ definition related to the edited order entity. The _orderId_ variable should store the order id. It may be passed, for example, on process start (see the <<starting-the-process-programmatically>> section).
+The next snippet can be used inside the order entity editor to get a list of process instances of `order-approval` definition related to the edited order entity. The `orderId` variable should store the order id. It may be passed, for example, on process start (see the <<starting-the-process-programmatically>> section).
 
 [source, java]
 ----
@@ -487,12 +487,12 @@ List<ProcessInstanceData> processInstances = bprocRuntimeService.createProcessIn
     .list();
 ----
 
-NOTE: The `ProcessInstanceData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
+TIP: The `ProcessInstanceData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
 
 [[getting-a-list-of-user-tasks]]
 === Getting a List of User Tasks
 
-The next snippet demonstrates how to get a list of user tasks of the _order-approval_ process, that are assigned to the current user and are related to the edited `Order` entity:
+The next snippet demonstrates how to get a list of user tasks of the `order-approval` process, that are assigned to the current user and are related to the edited `Order` entity:
 
 [source, java]
 ----
@@ -506,7 +506,7 @@ List<TaskData> tasks = bprocTaskService.createTaskDataQuery()
     .list();
 ----
 
-NOTE: The `TaskData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
+TIP: The `TaskData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
 
 [[complete-a-user-task]]
 === Complete a User Task
@@ -531,7 +531,7 @@ BPMN processes and DMN tables may be automatically deployed on application start
 classpath*:bproc/model/bpmn/**/*.bpmn20.xml
 ```
 
-This means that all files with names ending with `.bpmn20.xml` and located under the `bproc/model/bpmn` package of the _core_ module will be deployed when the application is started.
+This means that all files with names ending with `.bpmn20.xml` and located under the `bproc/model/bpmn` package of the *core* module will be deployed when the application is started.
 
 * `bproc.flowable.autoDeployDmnResourcesLocationPattern` database application property defines the filter for searching DMN table models. The default value is
 
@@ -539,7 +539,7 @@ This means that all files with names ending with `.bpmn20.xml` and located under
 classpath*:bproc/model/dmn/**/*.dmn.xml
 ```
 
-This means that all files with names ending with `.dmn.xml` and located under the `bproc/model/dmn` package of the _core_ module will be deployed when the application is started.
+This means that all files with names ending with `.dmn.xml` and located under the `bproc/model/dmn` package of the *core* module will be deployed when the application is started.
 
 Only files that were modified since last application start will be deployed.
 
@@ -550,14 +550,12 @@ image::auto-deployment-dir-structure.png[]
 
 An introduction to DMN can be found in  link:{flowable_dmn_doc_url}[Flowable DMN documentation]. 
 
-The BProc addon provides a decision table modeler that can be found under the _BProc -> Decision Table Modeler_ menu. 
+*BProc* add-on provides a decision table modeler that can be found under the *BProc -> Decision Table Modeler* menu. 
 
-.Decision table editor
 image::decision-table-editor.png[]
 
 In the model editor, you can add new input and output columns, edit column variable names, types and captions.
 
-.Input definition editor
 image::decision-table-input-definition-edit.png[]
 
 Using the action buttons panel you can deploy the decision table to the DMN engine or save the table definition draft if you wish to continue working on it later.
@@ -568,7 +566,7 @@ The decision table result will be stored in the corresponding process variable. 
 
 image::sequence-flow-decision-table.png[]
 
-You can select a business rule task, its output variable and possible values from dropdown lists.
+You can select a business rule task, its output variable and possible values from drop-down lists.
 
 [[process-engine-configuration]]
 == Process Engine Configuration
@@ -587,6 +585,6 @@ public class MyEngineInitializer {
     }
 }
 ----
-<1> A listener for the `BeforeProcessEngineInitEvent` event. See link:{cuba_doc_url}/events.html#bean_events[Event handling in beans] in CUBA documentation
-<2> Get the `ProcessEngineConfiguration` from the event instance
+<1> A listener for the `BeforeProcessEngineInitEvent` event. See link:{cuba_doc_url}/events.html#bean_events[Event handling in beans] in CUBA documentation.
+<2> Get the `ProcessEngineConfiguration` from the event instance.
 <3> Configure the process engine. E.g. set the number of times a job will be retried before it is moved to the deadletter table.
