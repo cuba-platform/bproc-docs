@@ -94,7 +94,7 @@ Let's look at the user tasks element in process XML:
 
 In the modeler, you'll have to fill the expression for the *Collection* field of the *multiInstanceLoopCharacteristics* element and the *elementVariable* field. After that use the `elementVariable` value as an `assignee` for the user task element.
 
-BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process, and some other elements) has a *Multi instance* section in the properties panel. When you change the multi-instance type from *None* to *Parallel* or *Sequential*, new fields appear on the panel. Let's suppose that in the start process form you defined a field ёlawyersё with the ёUser listё type. This field value holds a collection of users. For the current user task you may select a *Process variable* collection source and then select a ёlawyersё field in the *Process variable* lookup.
+BProc modeler helps you to fill all these attributes in case you have a list of users in the form field or in the process variable. A user task model element (as long as ServiceTask, Sub-process, and some other elements) has a *Multi instance* section in the properties panel. When you change the multi-instance type from *None* to *Parallel* or *Sequential*, new fields appear on the panel. Let's suppose that in the start process form you defined a field `lawyers` with the `User list` type. This field value holds a collection of users. For the current user task you may select a *Process variable* collection source and then select a `lawyers` field in the *Process variable* lookup.
 
 image::multi-instance-panel.png[]
 
