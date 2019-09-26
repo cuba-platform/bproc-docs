@@ -74,7 +74,7 @@ public class MyUserProvider implements UserProvider {
 }
 ----
 
-Note. A `UserProvider` class must be placed to the *core* module.
+TIP: A `UserProvider` class must be placed to the *core* module.
 
 [[multi-instance-tasks]]
 === Multi-instance Tasks
@@ -487,7 +487,7 @@ List<ProcessInstanceData> processInstances = bprocRuntimeService.createProcessIn
     .list();
 ----
 
-Note. The `ProcessInstanceData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
+TIP: The `ProcessInstanceData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
 
 [[getting-a-list-of-user-tasks]]
 === Getting a List of User Tasks
@@ -506,7 +506,7 @@ List<TaskData> tasks = bprocTaskService.createTaskDataQuery()
     .list();
 ----
 
-Note. The `TaskData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
+TIP: The `TaskData` is a not-persistent platform `Entity`, it can be displayed in standard UI components, i.e. in a `Table` or a `DataGrid`.
 
 [[complete-a-user-task]]
 === Complete a User Task

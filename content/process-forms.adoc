@@ -660,4 +660,4 @@ public class CustomFormScreenCreatorRegister {
 }
 ----
 
-Note. A `ProcessFormScreenCreator` and a bean that registers a `ProcessFormScreenCreator` must be located in the *web* module.
+TIP: A `ProcessFormScreenCreator` and a bean that registers a `ProcessFormScreenCreator` must be located in the *web* module.
