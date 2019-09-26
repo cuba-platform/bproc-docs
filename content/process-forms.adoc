@@ -19,30 +19,30 @@ image::process-forms/form-field-editor.png[]
 
 Supported parameter types are:
 
-* string
-* multi line string
-* number
-* boolean
-* date
-* date with time
-* user
-* user list
-* entity
-* entity list
-* file
-* platform enum
-* custom enum
+* String
+* Multi line string
+* Number
+* Boolean
+* Date
+* Date with time
+* User
+* User list
+* Entity
+* Entity list
+* File
+* Platform enum
+* Custom enum
 
-Depending on the selected type, additional components may be displayed. For example, for _entity_ and _entity list_ types you should select an entity class from the dropdown list, a UI component (LookupField or PickerField) and optionally a lookup screen or JPQL query (default values will be used if these fields are left blank).
+Depending on the selected type, additional components can be displayed. For example, for `Entity` and `Entity list` types you should select an entity class from the drop-down list, a UI component (LookupField or PickerField) and optionally a lookup screen or JPQL query (default values will be used if these fields are left blank).
 
-A _user_ and _users list_ types work like _entity_ and _entity list_ types with the `sec$User` meta class. An additional piece of functionality in the modeler related to these field types is that you will be able to select these parameters as assignee value of `UserTask` elements.
+`User` and `Users list` types work like `Entity` and `Entity list` types with the `sec$User` meta class. An additional piece of functionality in the modeler related to these field types is that you will be able to select these parameters as assignee value of `UserTask` elements.
 
 image::process-forms/user-task-form-field-assignee.png[]
 
 [[cuba-screen-process-form]]
 === CUBA Screen Process Form
 
-In many cases you'll probably need a process form with a complex layout and behavior. In this case, instead of <<input-dialog-process-form, input dialog forms>> (which are defined right in a process model) you may use an existing CUBA screen. To be used as a process form, the screen controller should be annotated with the `@ProcessForm` annotation.
+In many cases you'll probably need a process form with a complex layout and behavior. In this case, instead of <<input-dialog-process-form, input dialog forms>> (which are defined right in a process model) you can use an existing CUBA screen. To be used as a process form, the screen controller should be annotated with the `@ProcessForm` annotation.
 
 The `@ProcessForm` annotation indicates that the screen must appear in the process forms lookup in the modeler.
 
@@ -94,12 +94,12 @@ processFormContext.processStarting() <1>
     .addProcessVariable("approver", order.getManager())
     .start(); <4>
 ----
-<1> Creates a `ProcessStarting` instance
-<2> Sets the business key to the process instance
-<3> Adds a process variable
-<4> Does the actual process start
+<1> Creates a `ProcessStarting` instance.
+<2> Sets the business key to the process instance.
+<3> Adds a process variable.
+<4> Starts the actual process.
 
-An example of how to complete the uer task:
+An example of how to complete the user task:
 
 [source, java]
 ----
@@ -108,17 +108,17 @@ processFormContext.taskCompletion() <1>
     .saveInjectedProcessVariables() <3>
     .complete(); <4>
 ----
-<1> Creates a `TaskCompletion` instance
-<2> Sets the task outcome
-<3> Indicates that values of class fields annotated with the `@ProcessVariables` should be collected and saved as process variables
-<4> Does the actual task completion
+<1> Creates a `TaskCompletion` instance.
+<2> Sets the task outcome.
+<3> Indicates that values of class fields annotated with the `@ProcessVariables` should be collected and saved as process variables.
+<4> Completes the actual task.
 
 You can also use the `TaskData getTaskData()` and `ProcessDefinitionData getProcessDefinitionData()` methods.
 
 [[declare-task-outcomes-for-the-modeler]]
 ==== Declare Task Outcomes for the Modeler
 
-In the modeler, for the sequence flow element, we may define a condition by selecting a user task and its outcome from the dropdown list. To fill this list for a user task that uses a _CUBA screen_ process form you may declare a list of possible outcomes in the form controller. Use the `outcomes` attribute of the `@ProcessForm` annotation for that:
+In the modeler, for the sequence flow element, we may define a condition by selecting a user task and its outcome from the drop-down list. To fill this list for a user task that uses a *CUBA screen* process form you may declare a list of possible outcomes in the form controller. Use the `outcomes` attribute of the `@ProcessForm` annotation for that:
 
 .TaskApprovalForm.java
 [source, java]
@@ -137,10 +137,10 @@ public class TaskApprovalForm extends Screen {
 [[cuba-screen-process-form-parameters]]
 ==== CUBA Screen Process Form Parameters
 
-_CUBA screen_ process forms may accept external parameters defined in the modeler. For example, you need a form for next process actor selection. The form must display a lookup field with users and save the result into some process variable. We want to use the form for selecting different actors at different process steps, so the form should have two parameters:
+*CUBA screen* process forms can accept external parameters defined in the modeler. For example, you need a form for the next process actor selection. The form must display a lookup field with users and save the result into some process variable. We want to use the form for selecting different actors at different process steps, so the form should have two parameters:
 
-* variableName
-* lookupCaption
+* `variableName`
+* `lookupCaption`
 
 The form parameters used by the form are defined in the `params` attribute of the `@ProcessForm` annotation:
 
@@ -162,7 +162,7 @@ You can edit the parameters and give them values:
 
 image::process-forms/custom-form-param-edit.png[]
 
-You can provide a direct param value (value source is _Direct value_) or use one of the existing process variables as a parameter value (value source is _Process variable_).
+You can provide a direct param value (value source is `Direct value`) or use one of the existing process variables as a parameter value (value source is `Process variable`).
 
 Inside the process form controller use the `@ProcessFormParam` annotation on class fields to get parameter values:
 
@@ -251,15 +251,15 @@ public class ActorSelectionForm extends Screen {
     }
 }
 ----
-<1> Declares a list of parameters that will be shown in the modeler
-<2> Indicates that a parameter value that was defined in the process model should be injected into this class field
-<3> Updates the lookup field caption with the value defined in the process model
-<4> Saves the value of the users lookup field to the process variable which name was defined in the form param in the modeler
+<1> Declares the list of parameters that will be shown in the modeler.
+<2> Indicates that the parameter value that was defined in the process model should be injected into this class field.
+<3> Updates the lookup field caption with the value defined in the process model.
+<4> Saves the value of the users lookup field to the process variable which name was defined in the form param in the modeler.
 
 [[process-form-output-variables]]
 ==== Process Form Output Variables
 
-In the _CUBA Screen_ process form, process variables can be set. For example, you may complete the task this way:
+In the *CUBA Screen* process form, process variables can be set. For example, you may complete the task this way:
 
 [source, java]
 ----
@@ -304,11 +304,11 @@ Often there are cases when a process variable is set only when the task is compl
         }
 )
 ----
-<1> The `nextActor` variable may be set when the task is completed with the _approve_ outcome.
-<2> The `rejectionReason` variable may be set when the task is completed with the _reject__ outcome.
+<1> The `nextActor` variable may be set when the task is completed with the `approve` outcome.
+<2> The `rejectionReason` variable may be set when the task is completed with the `reject` outcome.
 <3> The `comment` variable may be set in any case.
 
-At the moment, this _output variables_ information is for the reference only. It is displayed in the corresponding section in the element properies panel when you select the process form:
+At the moment, this output variables information is for the reference only. It is displayed in the corresponding section in the element properies panel when you select the process form:
 
 image::process-forms/output-variables-process-form.png[]
 
@@ -322,7 +322,7 @@ By default, all process forms screens are available within any process model. If
 @ProcessForm(allowedProcessKeys = {"process-1", "process-2"})
 ----
 
-The form will be available only for process with `process-1` and `process-2` keys (_Process id_ in the modeler).
+The form will be available only for process with `process-1` and `process-2` keys (*Process id* in the modeler).
 
 [[process-process-forms-examples]]
 ==== Process Forms Examples
@@ -332,8 +332,8 @@ The form will be available only for process with `process-1` and `process-2` key
 
 The process form can be used as a start form. The form displays two fields:
 
-. a text field to enter the order number
-. a users dropdown list to select the manager (the manager ma be the next process actor)
+. A text field to enter the order number.
+. A users drop-down list to select the manager (the manager may be the next process actor).
 
 Screen XML descriptor:
 
@@ -395,12 +395,12 @@ public class StartApprovalForm extends Screen {
     }
 }
 ----
-<1> The `@ProcessForm` annotation indicates that this screen is a process form and the screen will be available in the modeler
-<2> We declare that the injected UI component (the _orderNumber_ text field) is a process variable. Since we develop a start process form, the variable has no value yet, but the annotation will be used on process start (we'll see it later)
-<3> The same as *2*, but here the process variable name (_manager_) differs from the field name (_managerLookup_)
-<4> `ProcessFormContext` is the object that we'll use to start the process
-<5> When we start the process, we can pass an optional process instance business key. We use the order number here
-<6> The `saveInjectedProcessVariables()` indicates that values of the fields annotated with the `@ProcessVariables` should be saved as process variables on process start
+<1> The `@ProcessForm` annotation indicates that this screen is a process form and the screen will be available in the modeler.
+<2> We declare that the injected UI component (the *orderNumber* text field) is a process variable. Since we develop a start process form, the variable has no value yet, but the annotation will be used on process start (we'll see it later).
+<3> The same as *2*, but here the process variable name (*manager*) differs from the field name (*managerLookup*).
+<4> `ProcessFormContext` is the object that we'll use to start the process.
+<5> When we start the process, we can pass an optional process instance business key. We use the order number here.
+<6> The `saveInjectedProcessVariables()` indicates that values of the fields annotated with the `@ProcessVariables` should be saved as process variables on process start.
 
 Instead of using `saveInjectedProcessVariables()` method you can explicitly set process variables:
 
@@ -419,10 +419,10 @@ processFormContext.processStarting()
 
 The task process form will display a couple of fields:
 
-. The first one will display a value of the existing process variable _orderNumber_
-. The second field will be used for the new process variable (_comment_)
+. The first one will display a value of the existing process variable (`orderNumber`).
+. The second field will be used for the new process variable (`comment`).
 
-There will be two buttons (_Approve_ and _Reject_) that complete the user task with the corresponding outcome.
+There will be two buttons (*Approve* and *Reject*) that complete the user task with the corresponding outcome.
 
 .task-approval-form.xml
 [source, xml]
@@ -488,8 +488,8 @@ public class TaskApprovalForm extends Screen {
 }
 ----
 <1> The form defines two possible outcomes that may be used in sequence flow node condition in the modeler. This information is used by the modeler only.
-<2> The _orderNumber_ variable has been already set on process start. Because of the `@ProcessVariable` annotation, the value of the _orderNumber_ process variables will be set to the _orderNumber_ text field when the form is displayed. 
-<3> The _comment_ variable is not set yet, but the `@ProcessVariable` annotation will be taken into account when we complete the task in the button click listener.
+<2> The `orderNumber` variable has been already set on process start. Because of the `@ProcessVariable` annotation, the value of the `orderNumber` process variables will be set to the `orderNumber` text field when the form is displayed. 
+<3> The `comment` variable is not set yet, but the `@ProcessVariable` annotation will be taken into account when we complete the task in the button click listener.
 <4> Values of all field annotated with the `@ProcessVariable` will be saved as process variables on task completion.
 <5> An alternative way to define process variables. Instead of using the `saveInjectedProcessVariables()` method you may define process variables directly.
 
@@ -498,7 +498,7 @@ public class TaskApprovalForm extends Screen {
 
 This example demonstrates how to use a `StandardEditor` as a process form. This may be useful in a case when you store some entity in a process variable and want to view or edit entity fields using the task process form.
 
-Let's suppose that we added a "Start process" button to the standard `Order` entity editor. The "Start process" button starts the process programmatically and puts the edited `Order` entity instance to the process variables.
+Let's suppose that we added a *Start process* button to the standard `Order` entity editor. The *Start process* button starts the process programmatically and puts the edited `Order` entity instance to the process variables.
 
 [source, java]
 ----
@@ -512,9 +512,9 @@ protected void onStartProcessBtnClick(Button.ClickEvent event) {
             processVariables);
 }
 ----
-<1> Put the edited entity to the _order_ process variable.
+<1> Put the edited entity to the `order` process variable.
 
-The xml descriptor of the process form that is defined for the next user task may look like this:
+The XML descriptor of the process form that is defined for the next user task may look like this:
 
 .order-edit-task-form.xml
 [source, xml]
@@ -553,9 +553,9 @@ The xml descriptor of the process form that is defined for the next user task ma
 </window>
 
 ----
-<1> The only thing that differs the form XML descriptor from regular entity editor is that we replaced the _editActions_ panel ("Ok" and "Cancel" buttons) with the panel that contains a _Complete task_ button.
+<1> The only thing that differs the form XML descriptor from regular entity editor is that we replaced the *editActions* panel (*Ok* and *Cancel* buttons) with the panel that contains the *Complete task* button.
 
-Process form java controller:
+Process form screen controller:
 
 .OrderEditTaskForm.java
 [source, java]
@@ -589,26 +589,26 @@ public class OrderEditTaskForm extends StandardEditor<Order> {
     }
 }
 ----
-<1> The `@ProcessForm` annotation indicates that the screen can be used as a process form
-<2> We inject the _order_ variable
+<1> The `@ProcessForm` annotation indicates that the screen can be used as a process form.
+<2> We inject the `order` variable.
 <3> By the time the `InitEvent` listener is fired, values of the `@ProcessVariable` fields must be already set. We invoke the `setEntityToEdit()` method of the `StandardEditor` class - this method reloads the `order` entity with the view required for the editor screen and sets the entity to the data container.
-<4> When the _Complete task_ button is clicked, the editor is commited, and if the commit was successful (all required fields are filled, etc.), the task completion is performed.
+<4> When the *Complete task* button is clicked, the editor is commited, and if the commit was successful (all required fields are filled, etc.), the task completion is performed.
 
 [[custom-process-form]]
 === Custom Process Form
 
 Custom process forms may be used if you need to render a form in a non-standard way. For custom process form the following fields may be provided:
 
-* form id
-* a list of form parameters
-* a list of outcomes
+* Form id
+* A list of form parameters
+* A list of outcomes
 
 If you use an alternative UI technology (e.g. react) then you'll need to get the form information and render the form using this information. Form information can be obtained using the `BprocFormService`. The `BprocFormService` has methods:
 
 * `FormData getStartFormData(String processDefinitionId)`
 * `FormData getTaskFormData(String taskId)`
 
-If you need to render custom forms in `Start Process` screen or `My Tasks` screen then you need to define and register the `ProcessFormScreenCreator` for the _custom_ form type:
+If you need to render custom forms in *Start Process* screen or *My Tasks* screen then you need to define and register the `ProcessFormScreenCreator` for the `Custom` form type:
 
 [source, java]
 ----
@@ -636,7 +636,7 @@ public class MyCustomProcessFormScreenCreator implements ProcessFormScreenCreato
 }
 ----
 
-Then this `ProcessFormScreenCreator` must be registered as a renderer creator of forms with type _custom_. This may be done on application startup using the `registerScreenCreator` method of the `ProcessFormScreenCreators` bean:
+Then this `ProcessFormScreenCreator` must be registered as a renderer creator of forms with type `Custom`. This may be done on application startup using the `registerScreenCreator` method of the `ProcessFormScreenCreators` bean:
 
 [source, java]
 ----
@@ -660,4 +660,4 @@ public class CustomFormScreenCreatorRegister {
 }
 ----
 
-NOTE: A `ProcessFormScreenCreator` and a bean that registers a `ProcessFormScreenCreator` must be located in the *web* module.
+Note. A `ProcessFormScreenCreator` and a bean that registers a `ProcessFormScreenCreator` must be located in the *web* module.
