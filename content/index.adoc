@@ -28,6 +28,64 @@
 
 This manual mostly describes features added by the add-on, not features provided by underlying frameworks, so you must be familiar with the https://www.flowable.org/docs/userguide/index.html[Flowable] engine.
 
+== Installation
+
+To install the release version of the component in your project you need to add premium repository and then install the add-on.
+
+=== Adding Repository
+
+1. Open your application in CUBA Studio.
+
+2. Double-click *Properties* in the CUBA project tree.
++
+image::properties.png[]
++
+3. Click the *Plus* button in the *Repositories* section.
++
+image::repository.png[]
++
+4. Specify the repository URL:
++
+ * https://cuba-platform.bintray.com/premium, if the main repository is Bintray
+ * https://repo.cuba-platform.com/content/groups/premium, if the main repository is repo.cuba-platform.com
+
++
+5. Enter your credentials in the corresponding fields. The first part of your license key before dash is the repository user name, the part after dash is the password. For example, if your key is `111111222222-abcdefabcdef`
+ * For Bintray repository user name - `111111222222@cuba-platform`, password - `abcdefabcdef`
+ * For repo.cuba-platform.com user name - `111111222222`, password - `abcdefabcdef`
++
+image::credentials.png[]
++
+Click *OK* to save the changes.
++
+Also, you can add the repository by editing `build.gradle` file. The configuration steps are described in https://doc.cuba-platform.com/manual-latest/access_to_repo.html#access_to_premium_repo[Developer's Manual].
++
+6. Select the added repository in the list of repositories to use it in your project.
++
+image::properties2.png[]
++
+7. Click *OK* to save the project properties.
+
+=== Adding Component
+
+1. Double-click *Add-ons* in the CUBA project tree.
++
+image::marketplace.png[]
++
+2. Select *Marketplace* tab and find *BProc* add-on.
++
+image::bproc-addon.png[]
++
+3. Click *Install* button and confirm that you have a subscription in the appeared dialog.
++
+image::subscription.png[]
++
+4. Click *Apply & Close* button and then *Continue* in the dialog.
++
+image::continue.png[]
+
+*BProc* add-on will be installed in your project.
+
 include::quick-start.adoc[]
 
 include::process-forms.adoc[]
