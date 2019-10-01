@@ -34,40 +34,35 @@ This manual mostly describes features added by the add-on, not features provided
 
 In case you've got a trial version of the add-on and have a ZIP file with artifacts, follow the instructions:
 
-1. Create a directory called `repository` in the root directory of your project. 
+1. Go to the user's home directory and create `.m2` folder if it doesn't exist. It is your local Maven repository. 
 
 2. Unzip the file with artifacts into this directory. You should get the following directory structure:
 +
 image::structure.png[]
 +
-3. Register the new Maven repository in the `build.gradle` file.
+3. Double-click *Properties* in CUBA project tree. 
 +
-[source]
-----
-repositories {
-        maven {
-            url './repository'
-        }
-}
-----
+image::properties.png[]
 +
-4. Go to *CUBA -> Marketplace* in the main menu.
+4. Select the *Use local Maven repository* checkbox and apply the changes.
+
+5. Go to *CUBA -> Marketplace* in the main menu.
 +
 image::main-menu.png[]
 +
-5. Click the *Gear* icon in the upper-right corner, then *Install by coordinates…*
+6. Click the *Gear* icon in the upper-right corner, then *Install by coordinates…*
 +
 image::gear.png[]
 +
-6. Enter coordinates of the latest add-on version. Copy coordinates from the *Component Coordinates* section on the page of the add-on on the https://www.cuba-platform.com/marketplace/[marketplace]. 
+7. Enter coordinates of the latest add-on version. Copy coordinates from the *Component Coordinates* section on the page of the add-on on the https://www.cuba-platform.com/marketplace/[marketplace]. 
 +
 image::copy-coordinates.png[]
 +
-7. Add `.trial` at the end of the coordinates, for example:
+8. Add `.trial` at the end of the coordinates, for example:
 +
 image::coordinates.png[]
 +
-8. Click *OK* and *Apply*. The installation will start.
+9. Click *OK* and *Apply*. The installation will start.
 
 === Installation of Purchased Add-on
 
