@@ -37,7 +37,7 @@ In case you've got a trial version of the add-on and have a ZIP file with artifa
 1. Go to the user's home directory and create `.m2` folder if it doesn't exist. It is your local Maven repository. Default home directory for operation system:
 +
 * Windows - `<root>\Users\<username>`
-* Unix-based - `<root>/home/<username>`
+* Linux - `/home/<username>`
 * macOS - `/Users/<username>`
 +
 2. Create folder `repository` in `.m2`.
