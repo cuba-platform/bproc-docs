@@ -8,16 +8,14 @@
 [discrete]
 ==== Breaking Changes
 
-. Some screen ids have been changed. If you have securiy roles that grant permissions to these screens, you'll have to update the roles. Modified screens ids:
-+
-* `bproc_ModelerScreen` -> `bproc_BpmnModelerScreen`
+. `bproc_ModelerScreen` screen ID has been changed to `bproc_BpmnModelerScreen`. If you have security roles that grant permissions to this screen, you have to update the roles.
 
-. `modeler` UI component has been renamed to `bpmnModeler`. If you had screens with the `modeler` component on them, you'll have to change the component name.
+. `modeler` UI component has been renamed to `bpmnModeler`. If you have screens with the `modeler` component, you have to change the component name.
 
 [discrete]
 ==== BPMN Viewer UI Component
 
-The BPMN Viewer UI component has been introduced. It can be used to display a read-only BPMN process diagram. The component has methods to highlight any model element. An example of its usage can be found in the process istance editor. A new tab called *Diagram* appeared there and it highligts active nodes.
+The BPMN Viewer UI component has been introduced. It can be used to display a read-only BPMN process diagram. The component has methods to highlight any model element. An example of its usage can be found in the *Process Instance Editor* screen. A new tab *Diagram* displays a process model with the highlighted active node.
 
 image::release-notes/diagram-in-process-instance-editor.png[]
 

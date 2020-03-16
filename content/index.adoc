@@ -20,7 +20,7 @@
 :lang: en
 :flowable_doc_url: https://www.flowable.org/docs/userguide/index.html
 :flowable_dmn_doc_url: https://www.flowable.org/docs/userguide-dmn/index.html
-:cuba_doc_url: https://doc.cuba-platform.com/manual-7.1
+:cuba_doc_url: https://doc.cuba-platform.com/manual-7.2
 
 [[preface]]
 == Preface
