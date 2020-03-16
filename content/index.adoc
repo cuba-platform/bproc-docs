@@ -11,7 +11,6 @@
 :icons: font
 :stylesdir: styles
 :imagesdir: images
-:sectnums:
 :sectlinks:
 :sectanchors:
 :nofooter:
@@ -23,12 +22,16 @@
 :flowable_dmn_doc_url: https://www.flowable.org/docs/userguide-dmn/index.html
 :cuba_doc_url: https://doc.cuba-platform.com/manual-7.1
 
-[[introduction]]
-== Introduction
+[[preface]]
+== Preface
 
 *BProc* add-on is used for modeling and running business processes. Processes are described using BPMN 2.0 notation. The add-on uses https://flowable.org/[Flowable] as a business process engine and https://bpmn.io/[bpmn-js] rendering toolkit for process modeling.
 
 This manual mostly describes features added by the add-on, not features provided by underlying frameworks, so you must be familiar with the https://www.flowable.org/docs/userguide/index.html[Flowable] engine.
+
+include::release-notes.adoc[]
+
+:sectnums:
 
 == Installation
 

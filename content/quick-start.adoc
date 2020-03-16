@@ -15,6 +15,8 @@ image::quick-start/refund-process-model.png[]
 
 Let's start modeling the process. Open the *BProc -> Modeler* screen.
 
+TIP: For projects created on CUBA 7.2+ BProc provides design-time roles: *bproc-process-admin* (grants an access to all BProc screens and entities, including modeler and administration screens) and *bproc-process-actor* (grants an access to BProc screens and entities required for starting the process and working with user tasks). *BProc -> Modeler* screen will be available to *admin* user and to users with *bproc-process-admin* role.
+
 When the modeler is first opened, the properties panel on the right displays properties of the process itself. Modify the fields:
 
 * *Process id*: `quick-start-refund`
@@ -140,7 +142,7 @@ A start form will appear. Fill the fields, select the manager and click the *Sta
 
 image::quick-start/start-process-form.png[]
 
-The manager will see assigned tasks in the *BProc -> My Tasks* screen.
+The manager will see assigned tasks in the *BProc -> My Tasks* screen. If the screen is not available then check that the manager has the *bproc-process-actor* role.
 
 image::quick-start/my-tasks-screen.png[]
 
