@@ -15,7 +15,7 @@ image::quick-start/refund-process-model.png[]
 
 Let's start modeling the process. Open the *BProc -> Modeler* screen.
 
-TIP: For projects created on CUBA 7.2+ BProc provides design-time roles: *bproc-process-admin* (grants an access to all BProc screens and entities, including modeler and administration screens) and *bproc-process-actor* (grants an access to BProc screens and entities required for starting the process and working with user tasks). *BProc -> Modeler* screen will be available to *admin* user and to users with *bproc-process-admin* role.
+TIP: For projects created on CUBA 7.2+ BProc provides design-time roles: *bproc-process-admin* (grants access to all BProc screens and entities, including modeler and administration screens) and *bproc-process-actor* (grants access to BProc screens and entities required for starting the process and working with user tasks). *BProc -> Modeler* screen will be available to  the *admin* user and to users with the *bproc-process-admin* role.
 
 When the modeler is first opened, the properties panel on the right displays properties of the process itself. Modify the fields:
 
