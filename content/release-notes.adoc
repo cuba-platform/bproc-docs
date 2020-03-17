@@ -23,3 +23,6 @@ image::release-notes/diagram-in-process-instance-editor.png[]
 ==== Miscellaneous
 
 . Flowable version was updated to 6.5.0.
+. Two link:{cuba_doc_url}/roles.html#roles_design_time[design-time roles] were added to BProc:
+* *bproc-process-admin* - grants access to all BProc screens and entities, including modeler and administration screens
+* *bproc-process-actor* - grants access to BProc screens and entities required for starting the process and working with user tasks
