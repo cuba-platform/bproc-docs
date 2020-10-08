@@ -2,8 +2,32 @@
 == Release Notes
 
 [discrete]
-[[release_1_1]]
-=== Release 1.1
+[[release_1_1_3]]
+=== Release 1.1.3
+
+Resolved issue:
+
+* BPM-265 https://youtrack.haulmont.com/issue/BPM-265[Error on migrating the process instance] 
+
+[discrete]
+[[release_1_1_2]]
+=== Release 1.1.2
+
+Resolved issue: 
+
+* BPM-286 https://youtrack.haulmont.com/issue/BPM-286[Duplicate rule IDs in DMN table editor] 
+
+[discrete]
+[[release_1_1_1]]
+=== Release 1.1.1
+
+Resolved issue:
+
+* BPM-279 https://youtrack.haulmont.com/issue/BPM-279[Input dialog parameters with Platform enum type are saved as String]
+
+[discrete]
+[[release_1_1_0]]
+=== Release 1.1.0
 
 [discrete]
 ==== Breaking Changes
@@ -24,5 +48,5 @@ image::release-notes/diagram-in-process-instance-editor.png[]
 
 . Flowable version was updated to 6.5.0.
 . Two link:{cuba_doc_url}/roles.html#roles_design_time[design-time roles] were added to BProc:
-* *bproc-process-admin* - grants access to all BProc screens and entities, including modeler and administration screens
-* *bproc-process-actor* - grants access to BProc screens and entities required for starting the process and working with user tasks
+* *bproc-process-admin* - grants access to all BProc screens and entities, including modeler and administration screens.
+* *bproc-process-actor* - grants access to BProc screens and entities required for starting the process and working with user tasks.
