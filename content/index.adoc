@@ -343,17 +343,15 @@ For the screenshot above, the process will continue its execution using this seq
 [[pools-and-lanes]]
 == Pools and Lanes
 
-If the process model uses pools and lanes then assignees can be defined not for individual user tasks, but for lanes.
+Using pools and lanes element you can define assignees for the all user tasks on the lane. Every user task on the lane without an explicitly defined assignee will inherit the assignee value from the lane.
 
-image::order-process-lanes.png[]
+To display the properties panel for the lane select the lane on the canvas. In the example below, the *manager* process variable is assigned to the selected lane *Manager*:
 
-If you select the lane, e.g. *Manager* then you'll be able to define an assignee for the lane:
+image::refund-process-lanes.png[]
 
-image::lane-properties-panel.png[]
+To display the process properties for the model with an added pool element you need to click on the header of the pool element.
 
-All user tasks on the lane without explicitly defined assignee will inherit the assignee value from the lane.
-
-To display and edit process properties click on the *pool* element.
+image::model-properties-panel.png[]
 
 [[user-groups]]
 == User Groups
