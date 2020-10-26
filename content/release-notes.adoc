@@ -7,7 +7,7 @@
 
 Resolved issue:
 
-* BPM-265 https://youtrack.haulmont.com/issue/BPM-265[Error on migrating the process instance] 
+* BPM-265 https://youtrack.cuba-platform.com/issue/BPM-265[Error on migrating the process instance]
 
 [discrete]
 [[release_1_1_2]]
@@ -15,7 +15,7 @@ Resolved issue:
 
 Resolved issue: 
 
-* BPM-286 https://youtrack.haulmont.com/issue/BPM-286[Duplicate rule IDs in DMN table editor] 
+* BPM-286 https://youtrack.cuba-platform.com/issue/BPM-286[Duplicate rule IDs in DMN table editor]
 
 [discrete]
 [[release_1_1_1]]
@@ -23,7 +23,7 @@ Resolved issue:
 
 Resolved issue:
 
-* BPM-279 https://youtrack.haulmont.com/issue/BPM-279[Input dialog parameters with Platform enum type are saved as String]
+* BPM-279 https://youtrack.cuba-platform.com/issue/BPM-279[Input dialog parameters with Platform enum type are saved as String]
 
 [discrete]
 [[release_1_1_0]]
