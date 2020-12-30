@@ -2,6 +2,43 @@
 == Release Notes
 
 [discrete]
+[[release_1_2_0]]
+=== Release 1.2.0
+
+[discrete]
+==== Resolved issues
+
+* BPM-203 https://youtrack.cuba-platform.com/issue/BPM-203[Multi-tenancy support]
++
+BProc addon can work together with the https://www.cuba-platform.com/marketplace/multitenancy[multi-tenancy] addon. If the multi-tenancy addon is added to the project then BProc screens (modeler, user tasks, process definitions, process instances, etc.) will take user's tenantId into account.
+
+* BPM-206 https://youtrack.cuba-platform.com/issue/BPM-206["Extension properties" panel for User Task elements]
++
+A special panel is added to the User Task element in the modeler. This panel allows you to add any metadata to the User Task element that later can be retrieved using the `com.haulmont.addon.bproc.service.BprocModelService#getElementExtensionProperties` method.
+
+* BPM-284 https://youtrack.cuba-platform.com/issue/BPM-284[It's impossible to add design-time security roles to user groups]
+* BPM-315 https://youtrack.cuba-platform.com/issue/BPM-315[Support flowable:useLocalScopeForResultVariable flag on the Service Task properties panel]
+* BPM-283 https://youtrack.cuba-platform.com/issue/BPM-283[Beans without an interface cannot be selected for service task in the modeler]
+* BPM-295 https://youtrack.cuba-platform.com/issue/BPM-295[Add the "unclaim" method to the BprocTaskService]
+* BPM-292 https://youtrack.cuba-platform.com/issue/BPM-292[Add elementId and elementName fields to JobData]
+* BPM-310 https://youtrack.cuba-platform.com/issue/BPM-310[Process variable dropdown list in the multi-instance properties panel should support text input]
+* BPM-307 https://youtrack.cuba-platform.com/issue/BPM-307[Hide unused end events from the modeler]
+* BPM-314 https://youtrack.cuba-platform.com/issue/BPM-314[Implement properties panel for Error Boundary Event]
+* BPM-308 https://youtrack.cuba-platform.com/issue/BPM-308[Implement properties panel for Error End Event]
+* BPM-309 https://youtrack.cuba-platform.com/issue/BPM-309[Implement properties panel for Terminate End Event]
+* BPM-320 https://youtrack.cuba-platform.com/issue/BPM-320[Event listeners cannot be added to the pool]
+
+[discrete]
+==== Important Notes
+
+Database schema has been changed. Don't forget to update the database.
+
+[discrete]
+==== Breaking Changes
+
+`UserGroup` and `ContentStorage` entities now implements the `TenantEntity` interface. This means that if you had the multi-tenancy addon in your project then be prepared that `UserGroup` and `ContentStorage` will be managed taking the tenantId attribute into account.
+
+[discrete]
 [[release_1_1_3]]
 === Release 1.1.3
 
