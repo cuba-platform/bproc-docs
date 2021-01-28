@@ -14,7 +14,7 @@
 :sectlinks:
 :sectanchors:
 :nofooter:
-:revnumber: 1.1
+:revnumber: 1.2
 :version-label: Version
 :revremark: Copyright (c) 2020 Haulmont (www.haulmont.com)
 :lang: en
