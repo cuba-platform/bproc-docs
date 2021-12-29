@@ -2,6 +2,21 @@
 == Release Notes
 
 [discrete]
+[[release_1_2_1]]
+=== Release 1.2.1
+
+[discrete]
+==== Resolved issues
+
+* BPM-342 https://youtrack.cuba-platform.com/issue/BPM-342[Message must not be located in parent packages]
+* BPM-334 https://youtrack.cuba-platform.com/issue/BPM-334[Task from another tenant has been appeared in group tasks]
+* BPM-343 https://youtrack.cuba-platform.com/issue/BPM-343[BprocAuthenticationInterceptor does not clear security context in case of any exception]
+* BPM-125 https://youtrack.cuba-platform.com/issue/BPM-125[If a process variable class is absent on the Web module then a ClassNotFoundException is thrown on opening the process instance editor]
+* BPM-337 https://youtrack.cuba-platform.com/issue/BPM-337[Signal/Message/Error definitions lists wrong behaviour]
+* BPM-333 https://youtrack.cuba-platform.com/issue/BPM-333['Unable to invoke method click in com.vaadin.shared.ui.button.ButtonServerRpc' during cancel claiming task]
+* BPM-336 https://youtrack.cuba-platform.com/issue/BPM-336['Please contact system administrator' error in case complete task ]
+
+[discrete]
 [[release_1_2_0]]
 === Release 1.2.0
 
@@ -50,7 +65,7 @@ Resolved issue:
 [[release_1_1_2]]
 === Release 1.1.2
 
-Resolved issue: 
+Resolved issue:
 
 * BPM-286 https://youtrack.cuba-platform.com/issue/BPM-286[Duplicate rule IDs in DMN table editor]
 
