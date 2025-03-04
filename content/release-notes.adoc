@@ -2,6 +2,15 @@
 == Release Notes
 
 [discrete]
+[[release_1_2_2]]
+=== Release 1.2.2
+
+[discrete]
+==== Resolved issues
+
+* Update dependencies https://github.com/cuba-platform/cuba/issues/3307[3307]
+
+[discrete]
 [[release_1_2_1]]
 === Release 1.2.1
 
